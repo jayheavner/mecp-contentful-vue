@@ -14,14 +14,26 @@ export default {
       .catch(console.error);
   },
 
-  one(id) {
-    client
-      .getEntry(id)
-      .then(response => {
-        debugger;
-        console.log(response.items)
-      })
-      .catch(console.error);
+  async one(id) {
+    const response = await client.getEntry(id);
+    debugger;
+    return response;
+  },
+
+  async bySlug(slug) {
+    try {
+      debugger;
+      const response = await client.getEntries({
+        content_type: 'simplePage',        
+        'fields.slug[in]': slug,
+        limit: 1,
+        include: 2
+      });
+      debugger;
+      return response.items[0];
+    } catch (err) {
+      console.err;
+    }
   },
 
   async byType(type) {
@@ -46,7 +58,8 @@ export default {
       const response = await client.getEntries({
         content_type: type,
         'fields.pageName[in]': title,
-        limit: 1
+        limit: 1,
+        include: 2
       });
       console.log(response.items[0]);
       // console.log(parseHtml(response.items[0]));

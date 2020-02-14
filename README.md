@@ -22,3 +22,8 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+File needs the following variables put into a .env
+VUE_APP_CONTENTFUL_SPACE = "<space>"
+VUE_APP_CONTENTFUL_ACCESS_TOKEN = "<access_token"
+  

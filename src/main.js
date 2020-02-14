@@ -8,6 +8,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 import Home from './pages/Home.vue';
+import Page from './pages/Page.vue';
 
 Vue.use(Router);
 let router = new Router({
@@ -19,6 +20,11 @@ let router = new Router({
       component: Home
     },
     {
+      path: '/:slug',
+      name: 'page',
+      component: Page,
+    },
+    {
       path: '*',
       redirect: '/'
     }
@@ -26,7 +32,7 @@ let router = new Router({
 });
 
 router.beforeEach(function(to, from, next) {
-  // debugger;
+  debugger;
   next();
 });
 
