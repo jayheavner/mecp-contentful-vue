@@ -39,7 +39,8 @@ computed: {
     }
   },
   mounted: function() {
-    // api.contentful.all();
+    let d = api.contentful.one('5lZI4V0fbbQ2JkS5zViFLD');
+    debugger;
     // api.contentful.byType('homePage');
     this.getContentByTitle('homePage', 'Home');
   },

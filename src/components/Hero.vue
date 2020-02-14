@@ -31,9 +31,6 @@ export default {
   props: {
     content: Object,
   },
-    mounted: function() {
-      debugger;
-    }
 };
 </script>
 

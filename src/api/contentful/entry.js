@@ -7,14 +7,20 @@ export default {
     console.log(client);
     client
       .getEntries()
-      .then(response => console.log(response.items))
+      .then(response => {
+        debugger;
+        console.log(response.items)
+      })
       .catch(console.error);
   },
 
   one(id) {
     client
       .getEntry(id)
-      .then(response => console.log(response.items))
+      .then(response => {
+        debugger;
+        console.log(response.items)
+      })
       .catch(console.error);
   },
 
