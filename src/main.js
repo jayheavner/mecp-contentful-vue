@@ -2,6 +2,8 @@ import Vue from 'vue';
 import App from './App.vue';
 import Router from 'vue-router';
 
+import store from './store';
+
 Vue.config.productionTip = false;
 
 import dotenv from 'dotenv';
@@ -25,6 +27,11 @@ let router = new Router({
       component: Page,
     },
     {
+      path: '/:slug/:subPage',
+      name: 'subPage',
+      component: Page,
+    },
+    {
       path: '*',
       redirect: '/'
     }
@@ -32,11 +39,12 @@ let router = new Router({
 });
 
 router.beforeEach(function(to, from, next) {
-  debugger;
+  // debugger;
   next();
 });
 
 new Vue({
   router,
+  store,
   render: h => h(App)
 }).$mount('#app');

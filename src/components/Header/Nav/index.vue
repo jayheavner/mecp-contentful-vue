@@ -9,11 +9,11 @@
 <script>
 
 import Utility from './Utility';
-import Main from "./Main";
+import Main from './Main';
 import SubNav from './SubNav'
 
 export default {
-  name: "Nav",
+  name: 'Nav',
   components: {
       Utility,
       Main,
@@ -22,6 +22,8 @@ export default {
   props: {},
   computed: {},
 
-  mounted: function() {}
+  mounted: function() {
+    debugger;
+  }
 };
 </script>

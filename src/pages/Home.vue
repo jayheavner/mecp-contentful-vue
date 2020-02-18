@@ -56,7 +56,3 @@ computed: {
   }
 };
 </script>
-
-<style lang="scss">
-@import '../assets/style/sass/config';
-</style>

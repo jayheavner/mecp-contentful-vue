@@ -14,15 +14,10 @@
 <script>
 
 export default {
-  name: "Logo",
+  name: 'Logo',
   props: {},
   computed: {},
 
   mounted: function() {}
 };
 </script>
-
-<style lang="scss">
-@import "../assets/style/sass/config";
-@import "../assets/style/sass/base/headers";
-</style>

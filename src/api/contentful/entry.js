@@ -22,14 +22,12 @@ export default {
 
   async bySlug(slug) {
     try {
-      debugger;
       const response = await client.getEntries({
         content_type: 'simplePage',        
         'fields.slug[in]': slug,
         limit: 1,
         include: 2
       });
-      debugger;
       return response.items[0];
     } catch (err) {
       console.err;

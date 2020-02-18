@@ -1,8 +1,8 @@
 <template>
-<header class="page-section-header container-fluid sticky">
+  <header class="page-section-header container-fluid sticky">
     <Logo />
     <Nav />
-</header>
+  </header>
 </template>
 
 <script>
@@ -10,19 +10,18 @@ import Logo from './Logo';
 import Nav from './Nav';
 
 export default {
-  name: "Heaader",
+  name: 'Header',
   components: {
     Logo,
-    Nav,
+    Nav
   },
   props: {},
+  data: () => ({ }),
+
   computed: {},
 
-  mounted: function() {}
+  mounted: function() {
+    debugger;
+  }
 };
 </script>
-
-<style lang="scss">
-@import "../assets/style/sass/config";
-@import "../assets/style/sass/base/headers";
-</style>
