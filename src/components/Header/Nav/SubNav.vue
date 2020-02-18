@@ -41,9 +41,6 @@ export default {
     ...mapState('subNav', ['items']),
     slug() {
       return this.$route.params.slug;
-    },
-    overview() {
-      return this.$route.params.slug;
     }
   },
   created() {

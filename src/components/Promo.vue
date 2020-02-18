@@ -1,37 +1,47 @@
 <template>
-  <section name="promos">
-    <div v-for="(promo, index) in content" :key="index">
-      <section
-        class="padding-top-lg"
-        :style="promo.backgroundImage"
-        style="background-size: cover;"
-      >
-        <div class="container">
-          <div class="row">
-            <div class="col-lg-offset-3 col-lg-9">
-              <h2>
-                <p>{{ promo.title }}</p>
-              </h2>
+    <section name="promos">
+      <div v-for="(promo, index) in content" :key="index">
+        <section
+          class="padding-top-lg"
+          :style="promo.backgroundImage"
+          style="background-size: cover;"
+        >
+          <div class="container">
+            <div class="row">
+              <div class="col-lg-offset-3 col-lg-9">
+                <h2>
+                  <p>{{ promo.title }}</p>
+                </h2>
+              </div>
+            </div>
+            <div class="row padding-vertical-lg">
+              <div
+                class="col-lg-offset-3 col-lg-9"
+                v-html="promo.description"
+              ></div>
+            </div>
+            <div v-if="promo.showLearnMoreLink" class="row">
+              <div class="col-sm-offset-6 col-sm-6 col-md-offset-8 col-md-4">
+                <router-link
+                  :to="{
+                    name: 'page',
+                    params: {
+                      slug: promo.relatedContent.slug,
+                      id: promo.relatedContent.entryId
+                    }
+                  }"
+                  class="link-button"
+                >
+                  Learn More
+                  <span>&gt;</span>
+                </router-link>
+              </div>
             </div>
           </div>
-          <div class="row padding-vertical-lg">
-            <div
-              class="col-lg-offset-3 col-lg-9"
-              v-html="promo.description"
-            ></div>
-          </div>
-          <div v-if="promo.showLearnMoreLink" class="row">
-            <div class="col-sm-offset-6 col-sm-6 col-md-offset-8 col-md-4">
-              <router-link :to="{ name: 'page', params: { slug: promo.relatedContent.slug, id: promo.relatedContent.entryId } }" class="link-button">
-                Learn More {{promo.relatedContent.slug}}
-                <span>&gt;</span>
-              </router-link>
-            </div>
-          </div>
-        </div>
-      </section>
-    </div>
-  </section>
+        </section>
+      </div>
+    </section>
+  
 </template>
 
 <script>
@@ -43,9 +53,11 @@ export default {
     html: Object
   },
   data: () => ({
+    rawHTML: Object,
     content: Array
   }),
   mounted: function() {
+    this.rawHTML = this.html;
     // flatten
     let array = [];
     for (let i = 0; i < this.html.content.length; i++) {
@@ -75,7 +87,7 @@ export default {
       let relatedContent = {
         slug: o.showLearnMoreLink ? array[i].linkedPage.fields.slug : undefined,
         entryId: o.showLearnMoreLink ? array[i].linkedPage.sys.id : undefined
-      }
+      };
       o.relatedContent = {
         slug: o.showLearnMoreLink ? array[i].linkedPage.fields.slug : undefined,
         entryId: o.showLearnMoreLink ? array[i].linkedPage.sys.id : undefined
