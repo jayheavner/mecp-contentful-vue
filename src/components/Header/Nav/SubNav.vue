@@ -34,9 +34,6 @@ import { mapActions, mapState } from 'vuex';
 
 export default {
   name: 'SubNav',
-  props: {
-    subNav: Array
-  },
   computed: {
     ...mapState('subNav', ['items']),
     slug() {

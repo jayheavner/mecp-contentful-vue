@@ -9,12 +9,26 @@ export default {
       .getEntries()
       .then(response => {
         debugger;
-        console.log(response.items)
+        console.log(response.items);
       })
       .catch(console.error);
   },
 
-  async one(id) {
+  async getMainNav() {
+    try {
+      const response = await client.getEntries({
+        content_type: 'homePage',
+        'sys.id': process.env.VUE_APP_HOME_PAGE_ENTRY_ID,
+        select: 'sys.id,fields.subNav'
+      });
+      debugger;
+      return response.items[0];
+    } catch (err) {
+      debugger;
+      console.err;
+    }
+  },
+  async byId(id) {
     const response = await client.getEntry(id);
     debugger;
     return response;
@@ -23,7 +37,7 @@ export default {
   async bySlug(slug) {
     try {
       const response = await client.getEntries({
-        content_type: 'simplePage',        
+        content_type: 'simplePage',
         'fields.slug[in]': slug,
         limit: 1,
         include: 2

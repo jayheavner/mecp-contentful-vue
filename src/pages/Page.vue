@@ -23,6 +23,14 @@ import api from '@/api';
 import { documentToHtmlString } from '@contentful/rich-text-html-renderer';
 import { BLOCKS, MARKS, INLINES } from '@contentful/rich-text-types';
 
+function renderList(node) {
+  debugger;
+}
+
+function renderImage(image) {
+  return `<img alt="" max-width="100%" src="${image.url}" style="float: right; margin: 10px 15px;">`;
+}
+
 //types of blocks can be found here - https://github.com/contentful/rich-text/blob/master/packages/rich-text-types/src/blocks.ts
 //types of inlines can be found here - https://github.com/contentful/rich-text/blob/master/packages/rich-text-types/src/inlines.ts
 const options = {
@@ -48,15 +56,13 @@ const options = {
       debugger;
     },
     [BLOCKS.EMBEDDED_ASSET]: (node, next) => {
-      debugger;
       const { title, description, file } = node.data.target.fields;
-      debugger;
       const mimeType = file.contentType;
       const mimeGroup = mimeType.split('/')[0];
 
       switch (mimeGroup) {
         case 'image':
-          return `<img src=${file.url} />`;
+          return renderImage(file);
         case 'application':
           return (
             <a alt={description ? description : null} href={file.url}>
@@ -73,8 +79,7 @@ const options = {
       }
     },
     [BLOCKS.LIST_ITEM]: (node, next) => {
-      debugger;
-      return next(node.content);
+      return `<li>${documentToHtmlString(node.content[0])}</li>`;
     },
     [BLOCKS.EMBEDDED_ENTRY]: node => {
       debugger;
@@ -125,10 +130,9 @@ export default {
   },
   methods: {
     async byId(id) {
-      this.page = (await api.contentful.one(id)).fields;
+      this.page = (await api.contentful.byId(id)).fields;
     },
     async bySlug(slug) {
-      debugger;
       this.page = (await api.contentful.bySlug(slug)).fields;
     },
     init() {
@@ -144,5 +148,5 @@ export default {
 </script>
 
 <style lang="scss">
-@import '../assets/style/sass/config';
+@import '../assets/style/style';
 </style>
