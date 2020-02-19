@@ -23,6 +23,24 @@ import api from '@/api';
 import { documentToHtmlString } from '@contentful/rich-text-html-renderer';
 import { BLOCKS, MARKS, INLINES } from '@contentful/rich-text-types';
 
+function renderEmbeded(node) {
+  debugger;
+  let linkedObject = node.data.target.sys.contentType.sys;
+  console.log(
+    `type: ${linkedObject.type}\nlinkType: ${linkedObject.linkType}\nid: ${linkedObject.id}\n`
+  );
+  switch (linkedObject.id) {
+    case 'iframe':
+      return renderIFrame(node.data.target.fields);
+    case 'simplePage':
+      return renderLinkButton(node.data.target.fields);
+  }
+}
+
+function renderLinkButton(fields) {
+  debugger;
+}
+
 function renderList(node) {
   debugger;
 }
@@ -31,31 +49,101 @@ function renderImage(image) {
   return `<img alt="" max-width="100%" src="${image.url}" style="float: right; margin: 10px 15px;">`;
 }
 
+function renderIFrame(fields) {
+  let height = fields.height ? `${fields.height}px` : '100%';
+  let width = fields.width ? `${fields.width}px` : '100%';
+  return `<iframe frameborder="0" height="${height}" src="${fields.link}" title="${fields.title}" width="${width}"></iframe>`;
+}
 //types of blocks can be found here - https://github.com/contentful/rich-text/blob/master/packages/rich-text-types/src/blocks.ts
 //types of inlines can be found here - https://github.com/contentful/rich-text/blob/master/packages/rich-text-types/src/inlines.ts
 const options = {
-  renderMark: {
-    [MARKS.BOLD]: text => `<custom-bold>${text}<custom-bold>`
-  },
   renderNode: {
     // [BLOCKS.PARAGRAPH]: (node, next) => {
-    //   debugger;
+    //   try {
+    //     if ( node.content.length > 1 && node.content[1].nodeType === 'embedded-entry-inline') {
+    //       let embed = node.content[1];
+    //       const { sys, fields } = embed.data.target;
+    //       if (sys.contentType.sys.id) {
+    //         return renderIFrame(fields);
+    //       }
+    //     }
+    //   } catch (err) {
+    //     debugger;
+    //   }
+    //   let html = '';
+    //   for (const item of node.content) {
+    //     switch (item.nodeType) {
+    //       case 'text':
+    //         html += item.value;
+    //         break;
+    //         case 'hyperlink':
+    //           html += `<a href="${item.data.url}>${item.value}</a>`;
+    //           break;
+    //       default:
+    //       console.log(item.nodeType);
+    //     }
+    //   }
+    //   let content = node.content;
+    //   let nextContent = next(content);
+    //   let h = documentToHtmlString(content);
+    //   let h1 = documentToHtmlString(nextContent);
+    //   return html;
     //   // `<custom-paragraph>${next(node.content)}</custom-paragraph>`;
     // },
+    [BLOCKS.EMBEDDED_ENTRY]: (node, next) => {
+      renderEmbeded(node);
+    },
+    // [BLOCKS.EMBEDDED_ASSET]: (node, next) => {
+    //   debugger;
+    // },
     [INLINES.HYPERLINK]: (node, next) => {
-      //debugger;
-      return node;
+      var a = document.createElement('a');
+      let uri = new URL(node.data.uri);
+      a.href = uri;
+      if (uri.hostname !== location.hostname) a.target = '_blank';
+      if (node.content.length === 1) {
+        let item = node.content[0];
+        a.appendChild(document.createTextNode(item.value));
+        if (item.nodeType === 'text' && item.value === 'LEARN MORE') {
+          a.classList.add('link-button');
+          let span = document.createElement('span');
+          span.appendChild(document.createTextNode('>'));
+          a.appendChild(span);
+        }
+      } else {
+        debugger;
+      }
+      // for (const item in node.content) {
+      //   if (item.nodeType === 'text' && item.value === 'Learn More>')
+      //     a.class = 'link-button';
+
+      //   debugger;
+      // a.appendChild(document.createTextNode(item.value));
+      // return `<a href="${item.data.uri} class="link-button">${item.value}</a>`;
+      //   return a;
+      // }
+
+      // console.log(node.data.uri);
+      if (a.classList.contains('link-button')) {
+        // let's get crazy
+        return `<div class="row">
+            <div class="col-sm-offset-6 col-sm-6 col-md-offset-8 col-md-4">
+                ${a.outerHTML}
+            </div>
+        </div>`;
+      } else return a.outerHTML;
     },
-    [INLINES.ENTRY_HYPERLINK]: (node, next) => {
-      debugger;
-    },
-    [INLINES.ASSET_HYPERLINK]: (node, next) => {
-      debugger;
-    },
-    [INLINES.ASSET_HYPERLINK]: (node, next) => {
-      debugger;
+    // [INLINES.ENTRY_HYPERLINK]: (node, next) => {
+    //   debugger;
+    // },
+    // [INLINES.ASSET_HYPERLINK]: (node, next) => {
+    //   debugger;
+    // },
+    [INLINES.EMBEDDED_ENTRY]: (node, next) => {
+      renderEmbeded(node);
     },
     [BLOCKS.EMBEDDED_ASSET]: (node, next) => {
+      debugger;
       const { title, description, file } = node.data.target.fields;
       const mimeType = file.contentType;
       const mimeGroup = mimeType.split('/')[0];
@@ -63,13 +151,8 @@ const options = {
       switch (mimeGroup) {
         case 'image':
           return renderImage(file);
-        case 'application':
-          return (
-            <a alt={description ? description : null} href={file.url}>
-              {title ? title : file.details.fileName}
-            </a>
-          );
         default:
+          debugger;
           return (
             <span style={{ backgroundColor: 'red', color: 'white' }}>
               {' '}
@@ -77,27 +160,27 @@ const options = {
             </span>
           );
       }
-    },
-    [BLOCKS.LIST_ITEM]: (node, next) => {
-      return `<li>${documentToHtmlString(node.content[0])}</li>`;
-    },
-    [BLOCKS.EMBEDDED_ENTRY]: node => {
-      debugger;
-      const fields = node.data.target.fields;
-      switch (node.data.target.sys.contentType.sys.id) {
-        case 'blockquote':
-          return (
-            <div>
-              <BlockQuote
-                quoteText={fields.quoteText['en-US']}
-                quoter={fields.quoter['en-US']}
-              />
-            </div>
-          );
-        default:
-          return '';
-      }
     }
+    // [BLOCKS.LIST_ITEM]: (node, next) => {
+    //   return `<li>${documentToHtmlString(node.content[0])}</li>`;
+    // },
+    // [BLOCKS.EMBEDDED_ENTRY]: node => {
+    //   debugger;
+    //   const fields = node.data.target.fields;
+    //   switch (node.data.target.sys.contentType.sys.id) {
+    //     case 'blockquote':
+    //       return (
+    //         <div>
+    //           <BlockQuote
+    //             quoteText={fields.quoteText['en-US']}
+    //             quoter={fields.quoter['en-US']}
+    //           />
+    //         </div>
+    //       );
+    //     default:
+    //       return '';
+    //   }
+    // }
   }
 };
 
@@ -115,9 +198,7 @@ export default {
       return Object.keys(this.page).length > 0;
     },
     pageContent() {
-      let h = documentToHtmlString(this.page.content, options);
-      debugger;
-      return h;
+      return documentToHtmlString(this.page.content, options);
     }
   },
   watch: {
