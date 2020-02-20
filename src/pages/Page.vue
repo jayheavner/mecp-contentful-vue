@@ -5,7 +5,7 @@
       <section class="container padding-top-lg subPage">
         <h2>
           <p></p>
-          <p>{{  page.title === undefined? page.pageName : page.title }}</p>
+          <p>{{ page.title === undefined ? page.pageName : page.title }}</p>
           <p></p>
         </h2>
       </section>
@@ -37,6 +37,8 @@ function renderEmbeded(node) {
       return renderEmbeddedVideo(node.data.target.fields);
     case 'formStack':
       return renderFormStack(node.data.target.fields);
+    case 'studyGuide':
+      return renderStudyGuide(node.data.target.fields);
     case 'iframe':
       //return renderIFrame(node.data.target.fields);
       debugger;
@@ -85,6 +87,19 @@ function renderFormStack(fields) {
   return `<iframe frameborder="0" height="${height}" src="https://cea.formstack.com/forms/${fields.slug}" title="${fields.name}" width="${width}"></iframe>`;
 }
 
+function renderStudyGuide(fields) {
+  debugger;
+  let html = `
+    <div class="col-sm-6 col-lg-3 padding-bottom-sm text-xs-center text-sm-left">
+      <div class="image-wrapper">
+        <img class="img-fluid" src="${fields.coverImage.fields.file.url}" alt="${fields.title}">
+      </div>
+      <div class="guide-title">${fields.title}</div>
+      <div class="price"><a href="https://members.cta.tech/ctaMerchandiseDetail/?id=${fields.link}">Member Price: $${fields.memberPrice}.00</a></div>
+      <div class="price"><a href="https://members.cta.tech/ctaMerchandiseDetail/?id=${fields.link}">Nonmember Price: ${fields.nonmemberPrice}.00</a></div>
+    </div>`;
+  return html;
+}
 //types of blocks can be found here - https://github.com/contentful/rich-text/blob/master/packages/rich-text-types/src/blocks.ts
 //types of inlines can be found here - https://github.com/contentful/rich-text/blob/master/packages/rich-text-types/src/inlines.ts
 const options = {

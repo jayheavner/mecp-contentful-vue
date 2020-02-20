@@ -6,31 +6,78 @@
         <p v-html="content.title"></p>
       </h1>
       <br /><br />
-      <div class="buttons container">
-        <div class="col-md-6 col-lg-4">
-          <a class="btn btn-primary btn-lg outline" href="/Professionals.html">PROFESSIONALS</a>
+      <section v-if="nav.length > 0">
+        <div class="buttons container" v-if="nav.length > 0">
+          <div
+            class="col-md-6 col-lg-4"
+            v-for="(item, index) in nav"
+            :key="item.slug"
+            :index="index"
+          >
+            <router-link
+              class="btn btn-primary btn-lg outline"
+              :to="{
+                path: `/${item.slug}`,
+                params: { slug: item.slug, id: item.id }
+              }"
+            >
+              {{ item.pageName }}
+            </router-link>
+          </div>
         </div>
-        <div class="col-md-6 col-lg-4">
-          <a class="btn btn-primary btn-lg outline" href="/Employers.html">EMPLOYERS</a>
-        </div>
-        <div class="col-md-6 col-md-offset-3 col-lg-4 col-lg-offset-0">
-          <a class="btn btn-primary btn-lg outline" href="/Vehicle-Owners.html">VEHICLE OWNERS</a>
-        </div>
-      </div>
+      </section>
     </div>
-    <a class="scroll-down-button icon-down-arrow" href="/index.html#aboutMECP"></a>
+    <a
+      class="scroll-down-button icon-down-arrow"
+      href="/index.html#aboutMECP"
+    ></a>
   </section>
 </template>
 
 <script>
-
-import { documentToHtmlString } from '@contentful/rich-text-html-renderer';
+import { mapActions, mapState } from 'vuex';
 
 export default {
   name: 'Hero',
   props: {
-    content: Object,
+    content: Object
   },
+  data: () => ({
+    nav: Array
+  }),
+  computed: {
+    ...mapState('nav', ['navItems'])
+  },
+  created() {
+    this.buildNav();
+  },
+  methods: {
+    ...mapActions({
+      fetchNav: 'nav/fetch'
+    }),
+    buildLink(item) {
+      debugger;
+      let slug = this.$route.params.slug;
+      let subNav = this.$route.params.subNav;
+      if (subNav === undefined || item.slug !== subNav)
+        return `${this.$route.path}/${item.slug}`;
+
+      return `/${slug}/${subNav}`;
+    },
+    async buildNav() {
+      debugger;
+      let nav = Array;
+      let n = this.navItems;
+      if (Array.isArray(n) && n.length) nav = n;
+      else nav = await this.fetchNav();
+      // let nav =
+      //   n === undefined || n.length === 0 || n[0] === undefined
+      //     ? await this.fetchNav()
+      //     : n;
+      debugger;
+      this.nav = nav.slice(0, 3);
+    }
+  }
 };
 </script>
 
