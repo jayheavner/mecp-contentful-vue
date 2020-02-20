@@ -24,7 +24,6 @@ import { documentToHtmlString } from '@contentful/rich-text-html-renderer';
 import { BLOCKS, MARKS, INLINES } from '@contentful/rich-text-types';
 
 function renderEmbeded(node) {
-  debugger;
   let linkedObject = node.data.target.sys.contentType.sys;
   switch (linkedObject.id) {
     case 'calloutLinkedContent':
@@ -103,7 +102,7 @@ const options = {
     //   // `<custom-paragraph>${next(node.content)}</custom-paragraph>`;
     // },
     [BLOCKS.EMBEDDED_ENTRY]: (node, next) => {
-      debugger;
+      // debugger;
       return renderEmbeded(node);
     },
     // [BLOCKS.EMBEDDED_ASSET]: (node, next) => {
@@ -148,17 +147,17 @@ const options = {
       } else return a.outerHTML;
     },
     [INLINES.ENTRY_HYPERLINK]: (node, next) => {
-      debugger;
+      // debugger;
     },
     [INLINES.ASSET_HYPERLINK]: (node, next) => {
-      debugger;
+      // debugger;
     },
     [INLINES.EMBEDDED_ENTRY]: (node, next) => {
-      debugger;
+      // debugger;
       return renderEmbeded(node);
     },
     [BLOCKS.EMBEDDED_ASSET]: (node, next) => {
-      debugger;
+      // debugger;
       const { title, description, file } = node.data.target.fields;
       const mimeType = file.contentType;
       const mimeGroup = mimeType.split('/')[0];

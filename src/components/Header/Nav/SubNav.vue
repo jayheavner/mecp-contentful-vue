@@ -1,5 +1,5 @@
 <template>
-  <div class="row subnav">
+  <div class="row subnav" v-if="subNav.length > 0">
     <div class="scrollable">
       <ul>
         <li :class="isCurrent($route.params.slug)">
@@ -10,7 +10,7 @@
           </router-link>
         </li>
         <li
-          v-for="(item, index) in items"
+          v-for="(item, index) in subNav"
           :key="item.slug"
           :index="index"
           :class="isCurrent(item.slug)"
@@ -34,32 +34,39 @@ import { mapActions, mapState } from 'vuex';
 
 export default {
   name: 'SubNav',
+  data: () => ({
+    subNav: Array
+  }),
   computed: {
-    ...mapState('subNav', ['items']),
+    ...mapState('nav', ['navItems']),
     slug() {
       return this.$route.params.slug;
     }
   },
+  watch: {
+    $route() {
+    this.buildSubNav();
+    }
+  },
   created() {
-    this.buildSubNav(this.slug);
+    this.buildSubNav();
   },
   methods: {
     ...mapActions({
-      fetchSubNav: 'subNav/fetch'
+      fetchNav: 'nav/fetch'
     }),
     buildLink(item) {
-      let slug = this.$route.params.slug;
-      let subPage = this.$route.params.subPage;
-      if (subPage === undefined || item.slug !== subPage)
-        return `${this.$route.path}/${item.slug}`;
-
-      return `/${slug}/${subPage}`;
+      let parents = getParent(item.parent.fields);
+      return `/${parents.join('/')}/${item.slug}`;
     },
-    buildSubNav(slug) {
-      this.fetchSubNav(slug);
-      // this.fetchSubNav(slug).then(response => {
-      //   debugger;
-      // })
+    async buildSubNav() {
+      let n = this.navItems;
+      let nav =
+        n === undefined || n.length === 0 || n[0] === undefined
+          ? await this.fetchNav()
+          : n;
+      let subNav = nav.find(n => n.slug === this.$route.params.slug);
+      this.subNav = subNav.children;
     },
     isCurrent(item) {
       let route = this.$route;
@@ -71,4 +78,14 @@ export default {
     }
   }
 };
+
+const getParent = child => {
+  let parent = [];
+  let slug = child.slug;
+  if (slug !== undefined) {
+    parent.push(slug);
+    parent.concat(getParent(child.parent.fields));
+  }
+  return parent;
+}
 </script>

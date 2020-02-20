@@ -1,7 +1,7 @@
 <template>
   <ul class="main-nav hidden-sm-down">
         <li
-          v-for="(item, index) in items"
+          v-for="(item, index) in navItems"
           :key="item.slug"
           :index="index"
           :class="isCurrent(item.slug)"
@@ -25,17 +25,22 @@ import { mapActions, mapState } from 'vuex';
 export default {
   name: 'Main',
   computed: {
-    ...mapState('mainNav', ['items']),
+    ...mapState('nav', ['navItems']),
     slug() {
       return this.$route.params.slug;
     }
   },
+  // watch: {
+  //   $route() {
+  //   this.buildNav(this.slug);
+  //   }
+  // },
   created() {
-    this.buildNav(this.slug);
+    this.buildNav();
   },
   methods: {
     ...mapActions({
-      fetchNav: 'mainNav/fetch'
+      fetchNav: 'nav/fetch'
     }),
     buildLink(item) {
       debugger;
@@ -46,8 +51,10 @@ export default {
 
       return `/${slug}/${subNav}`;
     },
-    buildNav(slug) {
-      this.fetchNav();
+    buildNav() {
+      let n = this.navItems;
+      if (n === undefined || n.length === 0 || n[0] === undefined)
+        this.fetchNav();
     },
     isCurrent(item) {
       let route = this.$route;

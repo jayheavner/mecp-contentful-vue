@@ -19,10 +19,10 @@ export default {
       const response = await client.getEntries({
         content_type: 'homePage',
         'sys.id': process.env.VUE_APP_HOME_PAGE_ENTRY_ID,
-        select: 'sys.id,fields.subNav'
+        select: 'fields.children',
+        include: 5
       });
-      debugger;
-      return response.items[0];
+      return response.items[0].fields.children;
     } catch (err) {
       debugger;
       console.err;
