@@ -32,6 +32,11 @@ let router = new Router({
       component: Page,
     },
     {
+      path: '/:slug/:subPage/:third',
+      name: 'thirdLevel',
+      component: Page,
+    },
+    {
       path: '*',
       redirect: '/'
     }
@@ -39,7 +44,7 @@ let router = new Router({
 });
 
 router.beforeEach(function(to, from, next) {
-  // debugger;
+  debugger;
   next();
 });
 
