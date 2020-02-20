@@ -15,20 +15,28 @@ const mutations = {
 };
 
 const actions = {
-  async fetch({ commit }, slug) {
+  async fetch({
+    commit
+  }, slug) {
     let parent = await api.contentful.bySlug(slug);
-    commit(
-      'SET_SUBNAV_ITEMS',
-      parent.fields.subPages.map(item => {
-        return {
-          id: item.sys.id,
-          slug: item.fields.slug,
-          pageName: item.fields.pageName
-        };
-      })
-    );
+    debugger;
+    if (parent.fields.subPages !== undefined) {
+      debugger;
+      commit(
+        'SET_SUBNAV_ITEMS',
+        parent.fields.subPages.map(item => {
+          return {
+            id: item.sys.id,
+            slug: item.fields.slug,
+            pageName: item.fields.pageName
+          };
+        })
+      );
+    }
   },
-  update({ commit }, items) {
+  update({
+    commit
+  }, items) {
     debugger;
     commit(
       'SET_SUBNAV_ITEMS',

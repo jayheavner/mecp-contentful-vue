@@ -1,8 +1,8 @@
 <template>
-  <section v-if="loaded">
+  <section v-if='loaded'>
     <Header />
-    <div class="mainBlock">
-      <section class="container padding-top-lg subPage">
+    <div class='mainBlock'>
+      <section class='container padding-top-lg subPage'>
         <h2>
           <p></p>
           <p>{{ page.pageName }}</p>
@@ -10,8 +10,8 @@
         </h2>
       </section>
 
-      <section class="container padding-bottom-lg">
-        <div class="padding-vertical-lg" v-html="pageContent"></div>
+      <section class='container padding-bottom-lg'>
+        <div class='padding-vertical-lg' v-html='pageContent'></div>
       </section>
     </div>
   </section>
@@ -26,19 +26,30 @@ import { BLOCKS, MARKS, INLINES } from '@contentful/rich-text-types';
 function renderEmbeded(node) {
   debugger;
   let linkedObject = node.data.target.sys.contentType.sys;
-  console.log(
-    `type: ${linkedObject.type}\nlinkType: ${linkedObject.linkType}\nid: ${linkedObject.id}\n`
-  );
   switch (linkedObject.id) {
+    case 'calloutLinkedContent':
+      debugger;
+      return renderLinkButton(node.data.target.fields);
     case 'iframe':
       return renderIFrame(node.data.target.fields);
     case 'simplePage':
-      return renderLinkButton(node.data.target.fields);
+      break;
+      //return renderLinkButton(node.data.target.fields);
+    default:
+      console.log(
+        `type: ${linkedObject.type}\nlinkType: ${linkedObject.linkType}\nid: ${linkedObject.id}\n`
+      );
   }
 }
 
 function renderLinkButton(fields) {
   debugger;
+  let html = `<div class='row'>
+      <div class='col-sm-offset-6 col-sm-6 col-md-offset-8 col-md-4'>
+        <a href="/${fields.linkedPage.fields.slug}" class="link-button">${fields.calloutText}<span>&gt;</span></a>
+      </div>
+    </div>`;
+  return html;
 }
 
 function renderList(node) {
@@ -46,7 +57,7 @@ function renderList(node) {
 }
 
 function renderImage(image) {
-  return `<img alt="" max-width="100%" src="${image.url}" style="float: right; margin: 10px 15px;">`;
+  return `<img alt="" max-width="100%" src="${image.url}" style='"loat: right; margin: 10px 15px;">`;
 }
 
 function renderIFrame(fields) {
@@ -54,6 +65,7 @@ function renderIFrame(fields) {
   let width = fields.width ? `${fields.width}px` : '100%';
   return `<iframe frameborder="0" height="${height}" src="${fields.link}" title="${fields.title}" width="${width}"></iframe>`;
 }
+
 //types of blocks can be found here - https://github.com/contentful/rich-text/blob/master/packages/rich-text-types/src/blocks.ts
 //types of inlines can be found here - https://github.com/contentful/rich-text/blob/master/packages/rich-text-types/src/inlines.ts
 const options = {
@@ -77,7 +89,7 @@ const options = {
     //         html += item.value;
     //         break;
     //         case 'hyperlink':
-    //           html += `<a href="${item.data.url}>${item.value}</a>`;
+    //           html += `<a href='${item.data.url}>${item.value}</a>`;
     //           break;
     //       default:
     //       console.log(item.nodeType);
@@ -91,12 +103,14 @@ const options = {
     //   // `<custom-paragraph>${next(node.content)}</custom-paragraph>`;
     // },
     [BLOCKS.EMBEDDED_ENTRY]: (node, next) => {
-      renderEmbeded(node);
+      debugger;
+      return renderEmbeded(node);
     },
     // [BLOCKS.EMBEDDED_ASSET]: (node, next) => {
     //   debugger;
     // },
     [INLINES.HYPERLINK]: (node, next) => {
+      // debugger;
       var a = document.createElement('a');
       let uri = new URL(node.data.uri);
       a.href = uri;
@@ -119,28 +133,29 @@ const options = {
 
       //   debugger;
       // a.appendChild(document.createTextNode(item.value));
-      // return `<a href="${item.data.uri} class="link-button">${item.value}</a>`;
+      // return `<a href='${item.data.uri} class='link-button'>${item.value}</a>`;
       //   return a;
       // }
 
       // console.log(node.data.uri);
       if (a.classList.contains('link-button')) {
         // let's get crazy
-        return `<div class="row">
-            <div class="col-sm-offset-6 col-sm-6 col-md-offset-8 col-md-4">
+        return `<div class='row'>
+            <div class='col-sm-offset-6 col-sm-6 col-md-offset-8 col-md-4'>
                 ${a.outerHTML}
             </div>
         </div>`;
       } else return a.outerHTML;
     },
-    // [INLINES.ENTRY_HYPERLINK]: (node, next) => {
-    //   debugger;
-    // },
-    // [INLINES.ASSET_HYPERLINK]: (node, next) => {
-    //   debugger;
-    // },
+    [INLINES.ENTRY_HYPERLINK]: (node, next) => {
+      debugger;
+    },
+    [INLINES.ASSET_HYPERLINK]: (node, next) => {
+      debugger;
+    },
     [INLINES.EMBEDDED_ENTRY]: (node, next) => {
-      renderEmbeded(node);
+      debugger;
+      return renderEmbeded(node);
     },
     [BLOCKS.EMBEDDED_ASSET]: (node, next) => {
       debugger;
@@ -228,6 +243,6 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang='scss'>
 @import '../assets/style/style';
 </style>
