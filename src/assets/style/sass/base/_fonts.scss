@@ -11,6 +11,7 @@
     font-weight: normal;
     font-style: normal;
 }
+
 @font-face {
     font-family: 'karbonsemibold';
     src: url('~@/assets/style/fonts/karbon-semibold-webfont.eot');
@@ -19,29 +20,6 @@
          url('~@/assets/style/fonts/karbon-semibold-webfont.woff') format('woff'),
          url('~@/assets/style/fonts/karbon-semibold-webfont.ttf') format('truetype'),
          url('~@/assets/style/fonts/karbon-semibold-webfont.svg#karbonsemibold') format('svg');
-    font-weight: normal;
-    font-style: normal;
-
-}
-@font-face {
-    font-family: 'karbonsemibold_italic';
-    src: url('~@/assets/style/fonts/karbon-semibolditalic-webfont.eot');
-    src: url('~@/assets/style/fonts/karbon-semibolditalic-webfont.eot?#iefix') format('embedded-opentype'),
-         url('~@/assets/style/fonts/karbon-semibolditalic-webfont.woff2') format('woff2'),
-         url('~@/assets/style/fonts/karbon-semibolditalic-webfont.woff') format('woff'),
-         url('~@/assets/style/fonts/karbon-semibolditalic-webfont.ttf') format('truetype'),
-         url('~@/assets/style/fonts/karbon-semibolditalic-webfont.svg#karbonsemibold_italic') format('svg');
-    font-weight: normal;
-    font-style: normal;
-}
-@font-face {
-    font-family: 'karbonmedium_italic';
-    src: url('~@/assets/style/fonts/karbon-mediumitalic-webfont.eot');
-    src: url('~@/assets/style/fonts/karbon-mediumitalic-webfont.eot?#iefix') format('embedded-opentype'),
-         url('~@/assets/style/fonts/karbon-mediumitalic-webfont.woff2') format('woff2'),
-         url('~@/assets/style/fonts/karbon-mediumitalic-webfont.woff') format('woff'),
-         url('~@/assets/style/fonts/karbon-mediumitalic-webfont.ttf') format('truetype'),
-         url('~@/assets/style/fonts/karbon-mediumitalic-webfont.svg#karbonmedium_italic') format('svg');
     font-weight: normal;
     font-style: normal;
 
@@ -59,17 +37,6 @@
     font-style: normal;
 
 }
-@font-face {
-    font-family: 'karbonregular_italic';
-    src: url('~@/assets/style/fonts/karbon-regularitalic-webfont.eot');
-    src: url('~@/assets/style/fonts/karbon-regularitalic-webfont.eot?#iefix') format('embedded-opentype'),
-         url('~@/assets/style/fonts/karbon-regularitalic-webfont.woff2') format('woff2'),
-         url('~@/assets/style/fonts/karbon-regularitalic-webfont.woff') format('woff'),
-         url('~@/assets/style/fonts/karbon-regularitalic-webfont.ttf') format('truetype'),
-         url('~@/assets/style/fonts/karbon-regularitalic-webfont.svg#karbonregular_italic') format('svg');
-    font-weight: normal;
-    font-style: normal;
-}
 
 @font-face {
     font-family: 'karbonregular';
@@ -79,30 +46,6 @@
          url('~@/assets/style/fonts/karbon-regular-webfont.woff') format('woff'),
          url('~@/assets/style/fonts/karbon-regular-webfont.ttf') format('truetype'),
          url('~@/assets/style/fonts/karbon-regular-webfont.svg#karbonregular') format('svg');
-    font-weight: normal;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: 'karbonlight_italic';
-    src: url('~@/assets/style/fonts/karbon-lightitalic-webfont.eot');
-    src: url('~@/assets/style/fonts/karbon-lightitalic-webfont.eot?#iefix') format('embedded-opentype'),
-         url('~@/assets/style/fonts/karbon-lightitalic-webfont.woff2') format('woff2'),
-         url('~@/assets/style/fonts/karbon-lightitalic-webfont.woff') format('woff'),
-         url('~@/assets/style/fonts/karbon-lightitalic-webfont.ttf') format('truetype'),
-         url('~@/assets/style/fonts/karbon-lightitalic-webfont.svg#karbonlight_italic') format('svg');
-    font-weight: normal;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: 'karbonlight';
-    src: url('~@/assets/style/fonts/karbon-light-webfont.eot');
-    src: url('~@/assets/style/fonts/karbon-light-webfont.eot?#iefix') format('embedded-opentype'),
-         url('~@/assets/style/fonts/karbon-light-webfont.woff2') format('woff2'),
-         url('~@/assets/style/fonts/karbon-light-webfont.woff') format('woff'),
-         url('~@/assets/style/fonts/karbon-light-webfont.ttf') format('truetype'),
-         url('~@/assets/style/fonts/karbon-light-webfont.svg#karbonlight') format('svg');
     font-weight: normal;
     font-style: normal;
 }
