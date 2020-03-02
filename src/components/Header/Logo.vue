@@ -2,9 +2,8 @@
   <div class="col-xs-6 col-sm-4 col-lg-3 logo">
     <a class="sticky-logo" href="/">
       <img
-        id="p_lt_ctl00_MECPLogo_ucEditableImage_imgImage"
         class="pull-left"
-        src="/MECP/media/Logos/MECPLogo.PNG?ext=.png"
+        :src="logo"
         alt
       />
     </a>
@@ -13,11 +12,33 @@
 
 <script>
 
+import api from '@/api';
 export default {
   name: 'Logo',
   props: {},
+  data: () => ({
+    logo: Object
+  }),
   computed: {},
-
-  mounted: function() {}
+  watch: {
+    $route() {
+      this.init();
+    }
+  },
+  created: function() {
+    this.init();
+  },
+  mounted: function() {},
+    methods: {
+    async byId(id) {
+      debugger;
+      this.logo = (await api.contentful.getAsset(id)).fields.file.url;
+      debugger;
+    },
+    init() {
+      let id = process.env.VUE_APP_HOMEPAGE_LOGO;
+      this.byId(id);
+    }
+  }
 };
 </script>

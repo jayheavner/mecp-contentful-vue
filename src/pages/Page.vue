@@ -88,7 +88,6 @@ function renderFormStack(fields) {
 }
 
 function renderStudyGuide(fields) {
-  debugger;
   let html = `
     <div class="col-sm-6 col-lg-3 padding-bottom-sm text-xs-center text-sm-left">
       <div class="image-wrapper">

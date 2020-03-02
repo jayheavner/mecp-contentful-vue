@@ -1,5 +1,6 @@
 import { client } from './client';
 import { documentToHtmlString } from '@contentful/rich-text-html-renderer';
+import {parse, stringify} from 'flatted/esm';
 
 export default {
   all() {
@@ -16,25 +17,47 @@ export default {
 
   async getMainNav() {
     try {
+      if (getLocalStorage('nav'))
+        return getLocalStorage('nav');
+
       const response = await client.getEntries({
         content_type: 'homePage',
         'sys.id': process.env.VUE_APP_HOME_PAGE_ENTRY_ID,
         select: 'fields.children',
         include: 5
       });
-      return response.items[0].fields.children;
+      debugger;
+      let children = response.items[0].fields.children;
+      setLocalStorage('nav', children);
+      return children;
     } catch (err) {
       debugger;
       console.err;
     }
   },
+
+  async getAsset(id) {
+    if (getLocalStorage(id))
+    return getLocalStorage(id);
+
+    const response = await client.getAsset(id);
+    setLocalStorage(id, response);
+    return response;
+  },
   async byId(id) {
-    const response = await client.getEntry(id);
     debugger;
+    if (getLocalStorage(id))
+      return getLocalStorage(id);
+
+    const response = await client.getEntry(id);
+    setLocalStorage(id, response);
     return response;
   },
 
   async bySlug(slug) {
+    if (getLocalStorage(slug))
+    return getLocalStorage(slug);
+
     try {
       const response = await client.getEntries({
         content_type: 'simplePage',
@@ -42,6 +65,7 @@ export default {
         limit: 1,
         include: 2
       });
+      setLocalStorage(slug, response.items[0]);
       return response.items[0];
     } catch (err) {
       console.err;
@@ -49,6 +73,7 @@ export default {
   },
 
   async byType(type) {
+    debugger;
     await client
       .getEntries({
         content_type: type,
@@ -66,6 +91,11 @@ export default {
   },
 
   async byTitle(type, title) {
+    const key = `${type}-${title}`;
+    let local = getLocalStorage(key);
+    if (local)
+      return local;
+
     try {
       const response = await client.getEntries({
         content_type: type,
@@ -74,6 +104,7 @@ export default {
         include: 2
       });
       console.log(response.items[0]);
+      setLocalStorage(key, response.items[0]);
       // console.log(parseHtml(response.items[0]));
       return response.items[0];
     } catch (err) {
@@ -101,6 +132,16 @@ export default {
   }
 };
 
+const getLocalStorage = key => {
+  if (window.localStorage.getItem(key))
+    return parse(window.localStorage.getItem(key));
+}
+
+const setLocalStorage = (key, val) => {
+  let json = stringify(val);
+  window.localStorage.setItem(key, json);
+
+}
 const parseHtml = (entry, parent = '', level = 0, maxNesting = 3) => {
   let content = {};
   for (const field in entry.fields) {

@@ -65,7 +65,6 @@ export default {
       return `/${slug}/${subNav}`;
     },
     async buildNav() {
-      debugger;
       let nav = Array;
       let n = this.navItems;
       if (Array.isArray(n) && n.length) nav = n;
@@ -74,7 +73,6 @@ export default {
       //   n === undefined || n.length === 0 || n[0] === undefined
       //     ? await this.fetchNav()
       //     : n;
-      debugger;
       this.nav = nav.slice(0, 3);
     }
   }
