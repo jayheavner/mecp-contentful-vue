@@ -1,17 +1,17 @@
 <template>
-  <section v-if='loaded'>
+  <section v-if="loaded">
     <Header />
-    <div class='mainBlock'>
-      <section class='container padding-top-lg subPage'>
+    <div class="mainBlock">
+      <section class="container padding-top-lg subPage">
         <h2>
           <p></p>
-          <p>{{ page.pageName }}</p>
+          <p>{{ page.title === undefined ? page.pageName : page.title }}</p>
           <p></p>
         </h2>
       </section>
 
-      <section class='container padding-bottom-lg'>
-        <div class='padding-vertical-lg' v-html='pageContent'></div>
+      <section class="container padding-bottom-lg">
+        <div class="padding-vertical-lg" v-html="pageContent"></div>
       </section>
     </div>
   </section>
@@ -20,20 +20,33 @@
 <script>
 import Header from '@/components/Header';
 import api from '@/api';
+import helpers from '@/helpers';
+
 import { documentToHtmlString } from '@contentful/rich-text-html-renderer';
 import { BLOCKS, MARKS, INLINES } from '@contentful/rich-text-types';
 
 function renderEmbeded(node) {
+  if (node.data.target.sys.contentType === undefined) return node;
+
   let linkedObject = node.data.target.sys.contentType.sys;
   switch (linkedObject.id) {
     case 'calloutLinkedContent':
       debugger;
       return renderLinkButton(node.data.target.fields);
+    case 'embeddedVideo':
+      return renderEmbeddedVideo(node.data.target.fields);
+    case 'formStack':
+      return renderFormStack(node.data.target.fields);
+    case 'studyGuide':
+      return renderStudyGuide(node.data.target.fields);
     case 'iframe':
-      return renderIFrame(node.data.target.fields);
-    case 'simplePage':
+      //return renderIFrame(node.data.target.fields);
+      debugger;
       break;
-      //return renderLinkButton(node.data.target.fields);
+    case 'simplePage':
+      return `<a href="${helpers.url.urlBuilder(node.data.target.fields)}">${
+        node.data.target.fields.pageName
+      }</a>`;
     default:
       console.log(
         `type: ${linkedObject.type}\nlinkType: ${linkedObject.linkType}\nid: ${linkedObject.id}\n`
@@ -56,15 +69,36 @@ function renderList(node) {
 }
 
 function renderImage(image) {
-  return `<img alt="" max-width="100%" src="${image.url}" style='"loat: right; margin: 10px 15px;">`;
+  return `<img alt="" max-width="100%" src="${image.url}" style="float: right; margin: 10px 15px;">`;
 }
 
-function renderIFrame(fields) {
+function renderEmbeddedVideo(fields) {
   let height = fields.height ? `${fields.height}px` : '100%';
   let width = fields.width ? `${fields.width}px` : '100%';
-  return `<iframe frameborder="0" height="${height}" src="${fields.link}" title="${fields.title}" width="${width}"></iframe>`;
+  let fullscreen = fields.allowFullScreen
+    ? `allowfullscreen="" mozallowfullscreen="" webkitallowfullscreen=""`
+    : '';
+  return `<iframe frameborder="0" height="${height}" src="${fields.link}" title="${fields.name}" width="${width}" ${fullscreen}></iframe>`;
 }
 
+function renderFormStack(fields) {
+  let height = fields.height ? `${fields.height}px` : '100%';
+  let width = fields.width ? `${fields.width}px` : '100%';
+  return `<iframe frameborder="0" height="${height}" src="https://cea.formstack.com/forms/${fields.slug}" title="${fields.name}" width="${width}"></iframe>`;
+}
+
+function renderStudyGuide(fields) {
+  let html = `
+    <div class="col-sm-6 col-lg-3 padding-bottom-sm text-xs-center text-sm-left">
+      <div class="image-wrapper">
+        <img class="img-fluid" src="${fields.coverImage.fields.file.url}" alt="${fields.title}">
+      </div>
+      <div class="guide-title">${fields.title}</div>
+      <div class="price"><a href="https://members.cta.tech/ctaMerchandiseDetail/?id=${fields.link}">Member Price: $${fields.memberPrice}.00</a></div>
+      <div class="price"><a href="https://members.cta.tech/ctaMerchandiseDetail/?id=${fields.link}">Nonmember Price: ${fields.nonmemberPrice}.00</a></div>
+    </div>`;
+  return html;
+}
 //types of blocks can be found here - https://github.com/contentful/rich-text/blob/master/packages/rich-text-types/src/blocks.ts
 //types of inlines can be found here - https://github.com/contentful/rich-text/blob/master/packages/rich-text-types/src/inlines.ts
 const options = {
@@ -105,9 +139,9 @@ const options = {
       // debugger;
       return renderEmbeded(node);
     },
-    // [BLOCKS.EMBEDDED_ASSET]: (node, next) => {
-    //   debugger;
-    // },
+    [BLOCKS.EMBEDDED_ASSET]: (node, next) => {
+      debugger;
+    },
     [INLINES.HYPERLINK]: (node, next) => {
       // debugger;
       var a = document.createElement('a');
@@ -147,10 +181,36 @@ const options = {
       } else return a.outerHTML;
     },
     [INLINES.ENTRY_HYPERLINK]: (node, next) => {
-      // debugger;
+      debugger;
     },
     [INLINES.ASSET_HYPERLINK]: (node, next) => {
-      // debugger;
+      debugger;
+      const { title, description, file } = node.data.target.fields;
+      const mimeType = file.contentType;
+
+      switch (mimeType) {
+        case 'application/pdf':
+          var a = document.createElement('a');
+          // eslint-disable-next-line no-case-declarations
+          a.href = node.data.target.fields.file.url;
+          a.target = '_blank';
+          // eslint-disable-next-line no-case-declarations
+          let item = node.content[0];
+          a.appendChild(document.createTextNode(item.value));
+          if (item.nodeType === 'text' && item.value === 'LEARN MORE') {
+            a.classList.add('link-button');
+            let span = document.createElement('span');
+            span.appendChild(document.createTextNode('>'));
+            a.appendChild(span);
+          }
+          return `<div class='row'>
+              <div class='col-sm-offset-6 col-sm-6 col-md-offset-8 col-md-4'>
+                ${a.outerHTML}
+              </div>
+            </div>`;
+        default:
+          debugger;
+      }
     },
     [INLINES.EMBEDDED_ENTRY]: (node, next) => {
       // debugger;
@@ -242,6 +302,6 @@ export default {
 };
 </script>
 
-<style lang='scss'>
+<style lang="scss">
 @import '../assets/style/style';
 </style>

@@ -32,6 +32,11 @@ let router = new Router({
       component: Page,
     },
     {
+      path: '/:slug/:subPage/:third',
+      name: 'thirdLevel',
+      component: Page,
+    },
+    {
       path: '*',
       redirect: '/'
     }
@@ -39,7 +44,9 @@ let router = new Router({
 });
 
 router.beforeEach(function(to, from, next) {
-  // debugger;
+  // super duper ghetto
+  if (to.path === '/professionals')
+    router.push({ path: `${to.path}/about-certification`});
   next();
 });
 

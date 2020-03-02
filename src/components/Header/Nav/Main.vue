@@ -1,25 +1,24 @@
 <template>
   <ul class="main-nav hidden-sm-down">
-        <li
-          v-for="(item, index) in navItems"
-          :key="item.slug"
-          :index="index"
-          :class="isCurrent(item.slug)"
-        >
-          <router-link
-            :to="{
-              path: `/${item.slug}`,
-              params: { slug: item.slug, id: item.id }
-            }"
-          >
-            {{ item.pageName }}
-          </router-link>
-        </li>
+    <li
+      v-for="(item, index) in navItems"
+      :key="item.slug"
+      :index="index"
+      :class="isCurrent(item.slug)"
+    >
+      <router-link
+        :to="{
+          path: `/${item.slug}`,
+          params: { slug: item.slug, id: item.id }
+        }"
+      >
+        {{ item.pageName }}
+      </router-link>
+    </li>
   </ul>
 </template>
 
 <script>
-
 import { mapActions, mapState } from 'vuex';
 
 export default {
