@@ -103,7 +103,13 @@ function renderStudyGuide(fields) {
 //types of inlines can be found here - https://github.com/contentful/rich-text/blob/master/packages/rich-text-types/src/inlines.ts
 const options = {
   renderNode: {
-    // [BLOCKS.PARAGRAPH]: (node, next) => {
+    [BLOCKS.PARAGRAPH]: (node, next) => {
+      if (node.content.length === 1 && node.content[0].nodeType === 'text' && node.content[0].value.match(/^ *$/) !== null)
+        return '<p>&nbsp</p>';
+      else {
+        return `<p>${next(node.content)}</p>`;
+        }
+    },
     //   try {
     //     if ( node.content.length > 1 && node.content[1].nodeType === 'embedded-entry-inline') {
     //       let embed = node.content[1];
@@ -134,6 +140,10 @@ const options = {
     //   let h1 = documentToHtmlString(nextContent);
     //   return html;
     //   // `<custom-paragraph>${next(node.content)}</custom-paragraph>`;
+    // },
+    // [BLOCKS.UL_LIST]: (node, next) => {
+    //   debugger;
+    //   return next(node.content);
     // },
     [BLOCKS.EMBEDDED_ENTRY]: (node, next) => {
       // debugger;
@@ -181,7 +191,21 @@ const options = {
       } else return a.outerHTML;
     },
     [INLINES.ENTRY_HYPERLINK]: (node, next) => {
+      const { pageName, slug, content, parent } = node.data.target.fields;
       debugger;
+      let parentUrl = helpers.url.urlBuilder(node.data.target.fields);
+      debugger;
+      var a = document.createElement('a');
+      //let uri = new URL(parentUrl);
+      a.href = parentUrl;
+      if (node.content.length === 1) {
+        let item = node.content[0];
+        a.appendChild(document.createTextNode(item.value));
+      } else {
+        debugger;
+      }
+      return a.outerHTML;
+
     },
     [INLINES.ASSET_HYPERLINK]: (node, next) => {
       debugger;
