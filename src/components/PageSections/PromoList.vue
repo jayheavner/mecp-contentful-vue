@@ -1,56 +1,30 @@
 <template>
-    <section name="promos">
-      <div v-for="(promo, index) in content" :key="index">
-        <section
-          class="padding-top-lg"
-          :style="promo.backgroundImage"
-          style="background-size: cover;"
-        >
-          <div class="container">
-            <div class="row">
-              <div class="col-lg-offset-3 col-lg-9">
-                <h2>
-                  <p>{{ promo.title }}</p>
-                </h2>
-              </div>
-            </div>
-            <div class="row padding-vertical-lg">
-              <div
-                class="col-lg-offset-3 col-lg-9"
-                v-html="promo.description"
-              ></div>
-            </div>
-            <div v-if="promo.showLearnMoreLink" class="row">
-              <div class="col-sm-offset-6 col-sm-6 col-md-offset-8 col-md-4">
-                <router-link
-                  :to="{
-                    name: 'page',
-                    params: {
-                      slug: promo.relatedContent.slug,
-                      id: promo.relatedContent.entryId
-                    }
-                  }"
-                  class="link-button"
-                >
-                  Learn More
-                  <span>&gt;</span>
-                </router-link>
-              </div>
-            </div>
-          </div>
-        </section>
-      </div>
-    </section>
-  
+  <section name="promos">
+    <div
+      class="col-md-6 col-lg-4"
+      v-for="(promo, index) in promos"
+      :key="index"
+      :index="index"
+    >
+      <component v-bind:is="getComponent(promo)" v-bind:widget="promo" />
+    </div>
+  </section>
 </template>
 
 <script>
+import GenericWidget from '../Widgets/GenericWidget';
+import Promo from '../Widgets/Promo';
 import { documentToHtmlString } from '@contentful/rich-text-html-renderer';
+import helpers from '@/helpers';
 
 export default {
-  name: 'Promo',
+  name: 'PromoList',
+  components: {
+    GenericWidget,
+    Promo
+  },
   props: {
-    section: Array
+    section: Object
   },
   data: () => ({
     promos: Array,
@@ -58,11 +32,11 @@ export default {
     content: Array
   }),
   mounted: function() {
-    debugger;
-    this.promos = this.section;
+    this.promos = this.section.fields.widgets;
     // flatten
     let array = [];
-    for (let i = 0; i < this.promos.content.length; i++) {
+    for (let i = 0; i < this.promos; i++) {
+      debugger;
       let o = {};
       let item = this.promos.content[i];
       if (item === undefined || item.data.target === undefined) continue;
@@ -102,12 +76,11 @@ export default {
   methods: {
     navigate() {
       debugger;
+    },
+    getComponent(section) {
+      let type = section.sys.contentType.sys.id;
+      return helpers.components.getWidgetComponent(type);
     }
   }
 };
 </script>
-
-<style lang="scss">
-@import '../assets/style/sass/config';
-@import '../assets/style/sass/base/headers';
-</style>

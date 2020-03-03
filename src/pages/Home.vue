@@ -10,9 +10,9 @@
 </template>
 
 <script>
-import Hero from '@/components/Hero';
-import About from '@/components/About';
-import Promo from '@/components/Promo';
+import Hero from '@/components/PageSections/Hero';
+import About from '@/components/PageSections/About';
+import Promo from '@/components/PageSections/PromoList';
 
 import api from '@/api';
 import { documentToHtmlString } from '@contentful/rich-text-html-renderer';

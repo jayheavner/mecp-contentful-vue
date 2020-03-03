@@ -44,19 +44,7 @@ export default {
   methods: {
     init() {
       debugger;
-      this.content = this.section.fields.widgets[0].fields;
-      for (let item of this.about) {
-        switch (item.type) {
-          case 'a':
-            break;
-        }
-      }
-      let id = this.$route.params.id;
-      if (id) this.byId(this.$route.params.id);
-      else {
-        let slug = this.$route.params.subPage || this.$route.params.slug;
-        this.bySlug(slug);
-      }
+      this.content = this.section.fields.widgets;
     }
   }
 };

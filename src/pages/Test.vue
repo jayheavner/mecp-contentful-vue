@@ -15,10 +15,10 @@
 </template>
 
 <script>
-import Hero from '@/components/Hero';
-import TwoColumns from '@/components/TwoColumns';
-import AboutMECP from '@/components/About';
-import Promo from '@/components/Promo';
+import Hero from '@/components/PageSections/Hero';
+import TwoColumns from '@/components/PageSections/TwoColumns';
+import AboutMECP from '@/components/PageSections/About';
+import PromoList from '@/components/PageSections/PromoList';
 
 import api from '@/api';
 import { documentToHtmlString } from '@contentful/rich-text-html-renderer';
@@ -28,7 +28,7 @@ export default {
   components: {
     Hero,
     AboutMECP,
-    Promo,
+    PromoList,
     TwoColumns
   },
   props: {
@@ -87,6 +87,3 @@ export default {
   }
 };
 </script>
-<style lang="scss">
-@import '../assets/style/style';
-</style>
