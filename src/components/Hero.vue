@@ -1,9 +1,9 @@
 <template>
   <section class="bg-hero full-height home container-fluid">
-    <img title="MECP" :src="content.image.file.url" alt="MECP" />
+    <img title="MECP" :src="imageUrl" alt="MECP" />
     <div id="mission-statement" class="content sticky-item">
       <h1 class="title">
-        <p v-html="content.title"></p>
+        <p v-html="formattedText"></p>
       </h1>
       <br /><br />
       <section v-if="nav.length > 0">
@@ -36,19 +36,40 @@
 
 <script>
 import { mapActions, mapState } from 'vuex';
+import { documentToHtmlString } from '@contentful/rich-text-html-renderer';
+import { BLOCKS, MARKS } from '@contentful/rich-text-types';
+
+const textOptions = {
+  renderMark: {
+    [MARKS.BOLD]: text => `<strong>${text}<strong>`
+  },
+  renderNode: {
+    [BLOCKS.PARAGRAPH]: (node, next) => {
+      return next(node.content);
+    }
+  }
+};
 
 export default {
   name: 'Hero',
   props: {
-    content: Object
+    section: Object
   },
   data: () => ({
-    nav: Array
+    nav: Array,
+    hero: Object,
   }),
   computed: {
-    ...mapState('nav', ['navItems'])
+    ...mapState('nav', ['navItems']),
+    imageUrl() {
+      return this.hero.image.fields.file.url;
+    },
+    formattedText() {
+      return documentToHtmlString(this.hero.text, textOptions);
+    }
   },
   created() {
+    this.hero = this.section.fields.widgets[0].fields;
     this.buildNav();
   },
   methods: {
@@ -78,7 +99,3 @@ export default {
   }
 };
 </script>
-
-<style lang="scss">
-@import '../assets/style/hero/style.scss';
-</style>

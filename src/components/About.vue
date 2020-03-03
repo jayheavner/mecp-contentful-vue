@@ -4,7 +4,7 @@
       <div class="row">
         <div class="col-xs-12 col-lg-offset-3 col-lg-9">
           <h2>
-            <p>{{title}}</p>
+            <p>{{ pageTitle }}</p>
           </h2>
         </div>
       </div>
@@ -14,38 +14,45 @@
             <img :src="imageUrl" alt />
           </div>
         </div>
-        <div class="col-xs-12 col-sm-6 col-md-9" v-html="formattedDescription"></div>
+        <div class="col-xs-12 col-sm-6 col-md-9" v-html="formattedText"></div>
       </div>
     </div>
   </section>
 </template>
 
 <script>
-
 import { documentToHtmlString } from '@contentful/rich-text-html-renderer';
 
 export default {
   name: 'About',
   props: {
-    title: String,
-    image: Object,
-    description: Object
+    section: Object,
   },
-  computed: {
-    imageUrl() {
-      return this.image.fields.file.url;
-    },
-    formattedDescription() {
-      return documentToHtmlString(this.description);
+  data: () => ({
+  }),
+  watch: {
+    $route() {
+      this.init();
     }
   },
-
-  mounted: function() {
+  created: function() {
+    this.init();
+  },
+  computed: {
+    pageTitle() {
+      return this.content.title;
+    },
+    imageUrl() {
+      return this.content.image.fields.file.url;
+    },
+    formattedText() {
+      return documentToHtmlString(this.content.text);
+    }
+  },
+  methods: {
+    init() {
+      this.content = this.section.fields.widgets[0].fields;
+    }
   }
 };
 </script>
-
-<style lang="scss">
-@import "../assets/style/sass/config";
-@import "../assets/style/sass/base/headers";
-</style>

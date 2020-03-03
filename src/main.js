@@ -9,6 +9,7 @@ Vue.config.productionTip = false;
 import dotenv from 'dotenv';
 dotenv.config();
 
+import Test from './pages/Test.vue';
 import Home from './pages/Home.vue';
 import Page from './pages/Page.vue';
 
@@ -16,6 +17,11 @@ Vue.use(Router);
 let router = new Router({
   mode: 'history',
   routes: [
+    {
+      path: '/test',
+      name: 'test',
+      component: Test
+    },
     {
       path: '/',
       name: 'home',

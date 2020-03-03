@@ -45,27 +45,27 @@ export default {
     return response;
   },
   async byId(id) {
-    debugger;
     if (getLocalStorage(id))
       return getLocalStorage(id);
 
-    const response = await client.getEntry(id);
-    setLocalStorage(id, response);
+      // const response = await client.getEntry(id);
+      const response = await client.getEntries({'sys.id': id});
+      setLocalStorage(id, response);
     return response;
   },
 
   async bySlug(slug) {
-    if (getLocalStorage(slug))
-    return getLocalStorage(slug);
+    // if (getLocalStorage(slug))
+    // return getLocalStorage(slug);
 
     try {
       const response = await client.getEntries({
-        content_type: 'simplePage',
+        content_type: 'page',
         'fields.slug[in]': slug,
         limit: 1,
-        include: 2
+        include: 5
       });
-      setLocalStorage(slug, response.items[0]);
+      // setLocalStorage(slug, response.items[0]);
       return response.items[0];
     } catch (err) {
       console.err;

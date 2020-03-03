@@ -50,19 +50,21 @@ import { documentToHtmlString } from '@contentful/rich-text-html-renderer';
 export default {
   name: 'Promo',
   props: {
-    html: Object
+    section: Array
   },
   data: () => ({
+    promos: Array,
     rawHTML: Object,
     content: Array
   }),
   mounted: function() {
-    this.rawHTML = this.html;
+    debugger;
+    this.promos = this.section;
     // flatten
     let array = [];
-    for (let i = 0; i < this.html.content.length; i++) {
+    for (let i = 0; i < this.promos.content.length; i++) {
       let o = {};
-      let item = this.html.content[i];
+      let item = this.promos.content[i];
       if (item === undefined || item.data.target === undefined) continue;
       let fields = item.data.target.fields;
       for (const field in fields) {
