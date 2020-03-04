@@ -3,7 +3,6 @@
     <div
       v-for="(promo, index) in promos"
       :key="index"
-      :index="index"
     >
       <component v-bind:is="getComponent(promo)" v-bind:widget="promo" />
     </div>

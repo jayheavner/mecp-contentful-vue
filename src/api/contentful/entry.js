@@ -59,13 +59,20 @@ export default {
     // return getLocalStorage(slug);
 
     try {
-      const response = await client.getEntries({
+      let response = await client.getEntries({
         content_type: 'page',
         'fields.slug[in]': slug,
         limit: 1,
         include: 5
       });
-      // setLocalStorage(slug, response.items[0]);
+      if (response === undefined || response.items === undefined || response.items.length === 0)
+        response = await client.getEntries({
+          content_type: 'page',
+          'fields.altSlugs[in]': slug,
+          limit: 1,
+          include: 5
+        });
+        // setLocalStorage(slug, response.items[0]);
       return response.items[0];
     } catch (err) {
       console.err;

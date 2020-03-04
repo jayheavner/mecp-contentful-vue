@@ -10,9 +10,8 @@
         <div class="buttons container" v-if="nav.length > 0">
           <div
             class="col-md-6 col-lg-4"
-            v-for="(item, index) in nav"
+            v-for="(item) in nav"
             :key="item.slug"
-            :index="index"
           >
             <router-link
               class="btn btn-primary btn-lg outline"
@@ -41,7 +40,7 @@ import { BLOCKS, MARKS } from '@contentful/rich-text-types';
 
 const textOptions = {
   renderMark: {
-    [MARKS.BOLD]: text => `<strong>${text}<strong>`
+    [MARKS.BOLD]: text => `<strong>${text}</strong>`
   },
   renderNode: {
     [BLOCKS.PARAGRAPH]: (node, next) => {

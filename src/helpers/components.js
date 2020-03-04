@@ -1,10 +1,6 @@
 export default {
   getWidgetComponent(type) {
-    switch (type) {
-      case 'promo':
-        return 'Promo';
-      case 'widget':
-        return 'GenericWidget';
-    }
+    type = type.replace(/^\w/, c => c.toUpperCase());
+    return type === 'Widget' ? 'GenericWidget' : type.replace(' ', '');
   }
 };

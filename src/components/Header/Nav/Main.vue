@@ -1,9 +1,8 @@
 <template>
   <ul class="main-nav hidden-sm-down">
     <li
-      v-for="(item, index) in navItems"
+      v-for="(item) in navItems"
       :key="item.slug"
-      :index="index"
       :class="isCurrent(item.slug)"
     >
       <router-link

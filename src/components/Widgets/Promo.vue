@@ -42,7 +42,7 @@ import { BLOCKS, MARKS } from '@contentful/rich-text-types';
 
 const options = {
   renderMark: {
-    [MARKS.BOLD]: text => `<strong>${text}<strong>`
+    [MARKS.BOLD]: text => `<strong>${text}</strong>`
   },
   renderNode: {
     [BLOCKS.PARAGRAPH]: (node, next) => {
