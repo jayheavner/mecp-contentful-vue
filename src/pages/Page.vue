@@ -12,12 +12,10 @@
         </h2>
       </section>
       <section class="container padding-bottom-lg">
-        <div
-          v-for="(section, index) in sections"
-          :key="index"
-          class="padding-vertical-lg"
-        >
+        <div class="padding-vertical-lg">
           <component
+            v-for="(section, index) in sections"
+            :key="index"
             v-bind:is="getComponent(section)"
             v-bind:section="section"
           />
