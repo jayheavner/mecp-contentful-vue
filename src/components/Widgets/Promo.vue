@@ -1,6 +1,6 @@
 <template>
   <section
-    class="padding-top-lg"
+    class="padding-top-sm padding-bottom-sm"
     :style="promo.backgroundImage"
     style="background-size: cover;"
   >
@@ -38,6 +38,22 @@
 
 <script>
 import { documentToHtmlString } from '@contentful/rich-text-html-renderer';
+import { BLOCKS, MARKS } from '@contentful/rich-text-types';
+
+const options = {
+  renderMark: {
+    [MARKS.BOLD]: text => `<strong>${text}<strong>`
+  },
+  renderNode: {
+    [BLOCKS.PARAGRAPH]: (node, next) => {
+      if (node.content.length === 1 && node.content[0].nodeType === 'text' && node.content[0].value.match(/^ *$/) !== null)
+        return '';
+      else {
+        return `<p>${next(node.content)}</p>`;
+        }
+    },
+  }
+};
 
 export default {
   name: 'PromoWidget',
@@ -50,7 +66,7 @@ export default {
     // content: Array
   }),
   mounted: function() {
-    this.promo = this.widget.fields;
+    this.promo = this.widget.fields || this.widget;
     this.promo.showBackgroundImage = this.promo.backgroundImage !== undefined;
     this.promo.backgroundImage = this.promo.showBackgroundImage
       ? {
@@ -74,7 +90,7 @@ export default {
         ? this.promo.linkedPage.sys.id
         : undefined
     };
-    this.promo.description = documentToHtmlString(this.promo.description);
+    this.promo.description = documentToHtmlString(this.promo.description, options);
 
     // // flatten
     // let array = [];
@@ -123,3 +139,7 @@ export default {
   // }
 };
 </script>
+<style lang="scss">
+p {padding-bottom: 25px;}
+li p { padding-bottom: 0px; }
+</style>
