@@ -4,7 +4,6 @@
   </section>
   <section v-else>
     <div
-      class="col-md-6 col-lg-4"
       v-for="(section, index) in sections"
       :key="index"
       :index="index"

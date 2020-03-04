@@ -1,7 +1,6 @@
 <template>
   <section name="promos">
     <div
-      class="col-md-6 col-lg-4"
       v-for="(promo, index) in promos"
       :key="index"
       :index="index"

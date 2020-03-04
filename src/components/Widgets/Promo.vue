@@ -50,7 +50,6 @@ export default {
     // content: Array
   }),
   mounted: function() {
-    debugger;
     this.promo = this.widget.fields;
     this.promo.showBackgroundImage = this.promo.backgroundImage !== undefined;
     this.promo.backgroundImage = this.promo.showBackgroundImage

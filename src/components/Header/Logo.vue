@@ -31,9 +31,7 @@ export default {
   mounted: function() {},
     methods: {
     async byId(id) {
-      debugger;
       this.logo = (await api.contentful.getAsset(id)).fields.file.url;
-      debugger;
     },
     init() {
       let id = process.env.VUE_APP_HOMEPAGE_LOGO;

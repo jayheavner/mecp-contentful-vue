@@ -191,21 +191,32 @@ const options = {
       } else return a.outerHTML;
     },
     [INLINES.ENTRY_HYPERLINK]: (node, next) => {
-      const { pageName, slug, content, parent } = node.data.target.fields;
-      debugger;
-      let parentUrl = helpers.url.urlBuilder(node.data.target.fields);
-      debugger;
-      var a = document.createElement('a');
-      //let uri = new URL(parentUrl);
-      a.href = parentUrl;
-      if (node.content.length === 1) {
-        let item = node.content[0];
-        a.appendChild(document.createTextNode(item.value));
-      } else {
-        debugger;
+      let pre = ''; let post = '';
+      let val = node.content[0].value;
+      for (let mark of node.content[0].marks) {
+        switch (mark.type) {
+          case 'bold':
+            pre += '<strong>';
+            post += '</strong>';
+            val = `<strong>${val}</strong>`;
+            break;
+          case 'italic':
+            pre += '<i>';
+            post += '</i>';
+            val = `<i>${val}</i>`;
+            break;
+          case 'underline':
+            pre += '<u>';
+            post += '</u>';
+            val = `<u>${val}</u>`;            
+            break;
+            
+          default:
+            debugger;
+        }
       }
-      return a.outerHTML;
-
+      let text = `${pre}${val}${post}`;
+      return `<a href="${helpers.url.urlBuilder(node.data.target.fields)}">${val}</a>`;
     },
     [INLINES.ASSET_HYPERLINK]: (node, next) => {
       debugger;
