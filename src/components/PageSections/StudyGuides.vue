@@ -19,13 +19,14 @@ export default {
     StudyGuide
   },
   props: {
-    section: Object
+    section: Array
   },
   data: () => ({
     guides: Array
   }),
   mounted: function() {
-    this.guides = this.section.fields.widgets;
+    debugger;
+    this.guides = this.section;
   },
   methods: {
     navigate() {

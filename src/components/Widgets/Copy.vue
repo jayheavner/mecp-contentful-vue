@@ -8,6 +8,7 @@
 <script>
 import { documentToHtmlString } from '@contentful/rich-text-html-renderer';
 import { MARKS, BLOCKS, INLINES } from '@contentful/rich-text-types';
+import helpers from '@/helpers';
 
 const options = {
   renderMark: {
@@ -15,6 +16,7 @@ const options = {
   },
   renderNode: {
     [INLINES.EMBEDDED_ENTRY]: (node, next) => {
+      debugger;
       let obj = node.data.target.fields;
       switch (node.data.target.sys.contentType.sys.id) {
         case 'floatedImage':
@@ -23,7 +25,13 @@ const options = {
           debugger;
       }
     },
+    [INLINES.ENTRY_HYPERLINK]: (node, next) => {
+      debugger;
+      // todo - this is only the slug, not the full path
+      return `<a href="${helpers.url.urlBuilder(node.data.target.fields.slug)}">${next(node.content)}</a>`;
+    },
     [INLINES.ASSET_HYPERLINK]: (node, next) => {
+      debugger;
       return `<a href="${node.data.target.fields.file.url}">${next(node.content)}</a>`;
     }
   }

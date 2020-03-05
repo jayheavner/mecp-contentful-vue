@@ -3,6 +3,7 @@
     <span>loading...</span>
   </section>
   <section v-else>
+    <Header />
     <div class="mainBlock">
       <section class="container padding-top-lg subPage">
         <h2>
@@ -14,10 +15,10 @@
       <section class="container padding-bottom-lg">
         <div class="padding-vertical-lg">
           <component
-            v-for="(section, index) in sections"
+            v-for="(widget, index) in widgetZone"
             :key="index"
-            v-bind:is="getComponent(section)"
-            v-bind:section="section"
+            v-bind:is="getComponent(widget)"
+            v-bind:widget="widget"
           />
         </div>
       </section>
@@ -26,40 +27,42 @@
 </template>
 
 <script>
-import Hero from '@/components/PageSections/Hero';
-import OneColumn from '@/components/PageSections/OneColumn';
-import TwoColumns from '@/components/PageSections/TwoColumns';
-import AboutMECP from '@/components/PageSections/About';
-import PromoList from '@/components/PageSections/PromoList';
-import StudyGuides from '@/components/PageSections/StudyGuides';
+import Header from '@/components/Header';
+import Layout from '@/components/Layout';
+import CallToAction from '@/components/Widgets/CallToAction';
+import Copy from '@/components/Widgets/Copy';
+import EmbeddedVideo from '@/components/Widgets/EmbeddedVideo';
+import FormStack from '@/components/Widgets/FormStack';
 
 import api from '@/api';
 import { documentToHtmlString } from '@contentful/rich-text-html-renderer';
+import helpers from '@/helpers';
 
 export default {
   name: 'Page',
   components: {
-    Hero,
-    AboutMECP,
-    PromoList,
-    OneColumn,
-    TwoColumns,
-    StudyGuides
+    Header,
+    Layout,
+    CallToAction,
+    Copy,
+    EmbeddedVideo,
+    FormStack
   },
   props: {
     url: String,
     pageType: String
   },
   data: () => ({
-    sections: Array,
-    about: Object,
-    hero: Object,
-    pageTitle: String,
-    promos: Object
+    widgetZone: Array
+    // sections: Array,
+    // about: Object,
+    // hero: Object,
+    // pageTitle: String,
+    // promos: Object
   }),
   computed: {
     loaded() {
-      return Object.keys(this.sections).length > 0;
+      return Object.keys(this.widgetZone).length > 0;
     }
   },
   watch: {
@@ -71,8 +74,11 @@ export default {
     this.init();
   },
   methods: {
-    getComponent(section) {
-      return section.fields.layout.replace(' ', '');
+    getComponent(zone) {
+      // zones can have layout sections (that contain widgets) or plain widgets
+      let type = zone.sys.contentType.sys.id;
+      let widget = helpers.components.getWidgetComponent(type);
+      return widget;
     },
     async byId(id) {
       debugger;
@@ -80,7 +86,7 @@ export default {
     },
     async bySlug(slug) {
       let response = await api.contentful.bySlug(slug);
-      this.sections = (await api.contentful.bySlug(slug)).fields.sections;
+      this.widgetZone = (await api.contentful.bySlug(slug)).fields.widgetZone;
     },
     init() {
       let id = this.$route.params.id;

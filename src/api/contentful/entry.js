@@ -57,7 +57,6 @@ export default {
   async bySlug(slug) {
     // if (getLocalStorage(slug))
     // return getLocalStorage(slug);
-
     try {
       let response = await client.getEntries({
         content_type: 'page',
