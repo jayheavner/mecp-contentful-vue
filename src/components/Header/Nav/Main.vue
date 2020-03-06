@@ -11,7 +11,7 @@
           params: { slug: item.slug, id: item.id }
         }"
       >
-        {{ item.pageName }}
+        {{ item.name }}
       </router-link>
     </li>
   </ul>
@@ -26,7 +26,7 @@ export default {
     ...mapState('nav', ['navItems']),
     slug() {
       return this.$route.params.slug;
-    }
+    },
   },
   // watch: {
   //   $route() {

@@ -20,7 +20,7 @@
               params: { slug: item.slug, id: item.id }
             }"
           >
-            {{ item.pageName }}
+            {{ item.name }}
           </router-link>
         </li>
       </ul>
@@ -55,10 +55,12 @@ export default {
       fetchNav: 'nav/fetch'
     }),
     buildLink(item) {
+      debugger;
       let parents = getParent(item.parent.fields);
       return `/${parents.join('/')}/${item.slug}`;
     },
     async buildSubNav() {
+      debugger;
       let n = this.navItems;
       let nav =
         n === undefined || n.length === 0 || n[0] === undefined
@@ -68,6 +70,7 @@ export default {
       this.subNav = subNav.children;
     },
     isCurrent(item) {
+      debugger;
       let route = this.$route;
       if (
         (item === route.params.slug && route.params.subPage === undefined) ||
@@ -79,6 +82,7 @@ export default {
 };
 
 const getParent = child => {
+  debugger;
   let parent = [];
   let slug = child.slug;
   if (slug !== undefined) {

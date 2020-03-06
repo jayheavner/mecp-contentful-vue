@@ -8,7 +8,7 @@
       <section class="container padding-top-lg subPage">
         <h2>
           <p></p>
-          <p>About MECP Certification</p>
+          <p>{{title}}</p>
           <p></p>
         </h2>
       </section>
@@ -33,9 +33,10 @@ import CallToAction from '@/components/Widgets/CallToAction';
 import Copy from '@/components/Widgets/Copy';
 import EmbeddedVideo from '@/components/Widgets/EmbeddedVideo';
 import FormStack from '@/components/Widgets/FormStack';
+import FloatedImage from '@/components/Widgets/FloatedImage';
+import Testimonial from '@/components/Widgets/Testimonial';
 
 import api from '@/api';
-import { documentToHtmlString } from '@contentful/rich-text-html-renderer';
 import helpers from '@/helpers';
 
 export default {
@@ -46,14 +47,17 @@ export default {
     CallToAction,
     Copy,
     EmbeddedVideo,
-    FormStack
+    FormStack,
+    FloatedImage,
+    Testimonial
   },
   props: {
     url: String,
     pageType: String
   },
   data: () => ({
-    widgetZone: Array
+    widgetZone: Array,
+    title: String
     // sections: Array,
     // about: Object,
     // hero: Object,
@@ -86,7 +90,10 @@ export default {
     },
     async bySlug(slug) {
       let response = await api.contentful.bySlug(slug);
-      this.widgetZone = (await api.contentful.bySlug(slug)).fields.widgetZone;
+      if (response.fields.widgetZone === undefined)
+        return;
+      this.widgetZone = response.fields.widgetZone;
+      this.title = response.fields.title;
     },
     init() {
       let id = this.$route.params.id;

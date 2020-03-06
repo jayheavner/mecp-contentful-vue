@@ -17,16 +17,15 @@ export default {
 
   async getMainNav() {
     try {
-      if (getLocalStorage('nav'))
-        return getLocalStorage('nav');
-
+      // if (getLocalStorage('nav'))
+      //   return getLocalStorage('nav');
+console.log(process.env.VUE_APP_HOME_PAGE_ENTRY_ID);
       const response = await client.getEntries({
-        content_type: 'homePage',
+        content_type: 'page',
         'sys.id': process.env.VUE_APP_HOME_PAGE_ENTRY_ID,
         select: 'fields.children',
         include: 5
       });
-      debugger;
       let children = response.items[0].fields.children;
       setLocalStorage('nav', children);
       return children;

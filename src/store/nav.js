@@ -29,7 +29,7 @@ const mapChild = parent => {
     return {
       id: item.sys.id,
       slug: item.fields.slug,
-      pageName: item.fields.pageName,
+      name: item.fields.name,
       parent: item.fields.parent,
       children:
         children !== undefined && children.length > 0 ? mapChild(children) : []

@@ -1,8 +1,9 @@
 <template>
-  <div class="row subnav" v-if="subNav.length > 0">
+<div>{{subNav.length}}
+  <div class="row subnav" v-if="display">
     <div class="scrollable">
       <ul>
-        <li :class="isCurrent($route.params.slug)">
+        <li v-if="hideOverview" :class="isCurrent($route.params.slug)">
           <router-link
             :to="{ name: 'page', params: { slug: $route.params.slug } }"
           >
@@ -10,7 +11,7 @@
           </router-link>
         </li>
         <li
-          v-for="(item) in subNav"
+          v-for="item in subNav"
           :key="item.slug"
           :class="isCurrent(item.slug)"
         >
@@ -20,31 +21,37 @@
               params: { slug: item.slug, id: item.id }
             }"
           >
-            {{ item.pageName }}
+            {{ item.name }}
           </router-link>
         </li>
       </ul>
     </div>
   </div>
+  </div>
 </template>
 
 <script>
+import api from '@/api';
 import { mapActions, mapState } from 'vuex';
 
 export default {
   name: 'SubNav',
   data: () => ({
-    subNav: Array
+    subNav: Array,
+    hideOverview: Boolean,
   }),
   computed: {
     ...mapState('nav', ['navItems']),
     slug() {
       return this.$route.params.slug;
+    },
+    display() {
+      return Array.isArray(this.subNav) && this.subNav.length > 0
     }
   },
   watch: {
     $route() {
-    this.buildSubNav();
+      this.buildSubNav();
     }
   },
   created() {
@@ -55,17 +62,28 @@ export default {
       fetchNav: 'nav/fetch'
     }),
     buildLink(item) {
+      let page = item.parent.fields;
       let parents = getParent(item.parent.fields);
       return `/${parents.join('/')}/${item.slug}`;
     },
     async buildSubNav() {
+      this.hideOverview = true;
+      debugger;
+      let route = this.$route;
       let n = this.navItems;
       let nav =
         n === undefined || n.length === 0 || n[0] === undefined
           ? await this.fetchNav()
           : n;
-      let subNav = nav.find(n => n.slug === this.$route.params.slug);
-      this.subNav = subNav.children;
+      let slug = route.params.slug;
+      let subNav = nav.find(n => n.slug === slug);
+      if (subNav === undefined) {
+        let response = await api.contentful.bySlug(slug);
+        let a = [];
+        this.hideOverview = false;
+        for (let child of response.fields.children) a.push(child.fields);
+        this.subNav = a;
+      } else this.subNav = subNav.children;
     },
     isCurrent(item) {
       let route = this.$route;
@@ -81,10 +99,10 @@ export default {
 const getParent = child => {
   let parent = [];
   let slug = child.slug;
-  if (slug !== undefined) {
+  if (slug !== undefined && child.parent !== undefined) {
     parent.push(slug);
     parent.concat(getParent(child.parent.fields));
   }
   return parent;
-}
+};
 </script>

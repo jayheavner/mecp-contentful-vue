@@ -9,7 +9,6 @@
 
 import Utility from './Utility';
 import Main from './Main';
-
 export default {
   name: 'Nav',
   components: {

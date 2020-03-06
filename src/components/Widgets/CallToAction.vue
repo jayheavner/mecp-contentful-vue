@@ -1,6 +1,6 @@
 <template>
   <section>
-    <h3>{{ title }}</h3>
+    <h3 v-if="title">{{ title }}</h3>
     <div v-html="text"></div>
 
     <div class="row">
@@ -16,6 +16,7 @@
 <script>
 import { documentToHtmlString } from '@contentful/rich-text-html-renderer';
 import { MARKS, BLOCKS, INLINES } from '@contentful/rich-text-types';
+import helpers from '@/helpers';
 
 const options = {
   renderMark: {
@@ -30,6 +31,12 @@ const options = {
         default:
           debugger;
       }
+    },
+    [INLINES.ENTRY_HYPERLINK]: (node, next) => {
+      return helpers.resolvers.inlines_entry_hyperlink(
+        node,
+        next(node.content)
+      );
     },
     [INLINES.ASSET_HYPERLINK]: (node, next) => {
       return `<a href="${node.data.target.fields.file.url}">${next(

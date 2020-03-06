@@ -47,22 +47,24 @@ const options = {
   },
   renderNode: {
     [BLOCKS.PARAGRAPH]: (node, next) => {
-      if (node.content.length === 1 && node.content[0].nodeType === 'text' && node.content[0].value.match(/^ *$/) !== null)
+      if (
+        node.content.length === 1 &&
+        node.content[0].nodeType === 'text' &&
+        node.content[0].value.match(/^ *$/) !== null
+      )
         return '';
       else {
         return `<p>${next(node.content)}</p>`;
-        }
+      }
     },
     [INLINES.ENTRY_HYPERLINK]: (node, next) => {
-      return helpers.resolvers.inlines_entry_hyperlink(node, next(node.content));
-    },
+      return helpers.resolvers.inlines_entry_hyperlink(
+        node,
+        next(node.content)
+      );
+    }
   }
 };
-
-
-
-
-
 
 export default {
   name: 'PromoWidget',
@@ -99,7 +101,10 @@ export default {
         ? this.promo.linkedPage.sys.id
         : undefined
     };
-    this.promo.description = documentToHtmlString(this.promo.description, options);
+    this.promo.description = documentToHtmlString(
+      this.promo.description,
+      options
+    );
 
     // // flatten
     // let array = [];
@@ -149,6 +154,10 @@ export default {
 };
 </script>
 <style lang="scss">
-p {padding-bottom: 25px;}
-li p { padding-bottom: 0px; }
+p {
+  padding-bottom: 25px;
+}
+li p {
+  padding-bottom: 0px;
+}
 </style>

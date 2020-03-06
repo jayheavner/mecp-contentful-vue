@@ -15,6 +15,10 @@ const options = {
     [MARKS.BOLD]: text => `<strong>${text}</strong>`
   },
   renderNode: {
+    // ['paragraph']: (node, next) => {
+    //   debugger;
+    //   return `<p>${next(node.content).replace(/\n/g, `</br>`)}</p>`;
+    // },
     [INLINES.EMBEDDED_ENTRY]: (node, next) => {
       debugger;
       let obj = node.data.target.fields;
@@ -26,10 +30,12 @@ const options = {
       }
     },
     [INLINES.ENTRY_HYPERLINK]: (node, next) => {
-      return helpers.resolvers.inlines_entry_hyperlink(node, next(node.content));
+      return helpers.resolvers.inlines_entry_hyperlink(
+        node,
+        next(node.content)
+      );
     },
     [INLINES.ASSET_HYPERLINK]: (node, next) => {
-      debugger;
       return `<a href="${node.data.target.fields.file.url}">${next(node.content)}</a>`;
     }
   }
@@ -50,3 +56,10 @@ export default {
   }
 };
 </script>
+
+// contentful strips out <br /> tags when documentToHtmlString is called. This handles that.
+<style lang="scss">
+p {
+  white-space: pre-wrap;
+}
+</style>
