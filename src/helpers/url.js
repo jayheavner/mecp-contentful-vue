@@ -1,16 +1,16 @@
-let parent = [];
-const getParent = child => {
+const getParent = (child, parent) => {
   let slug = child.slug;
   if (slug !== undefined) {
     parent.unshift(slug);
-    getParent(child.parent.fields);
+    if (child.parent.fields.slug !== 'home')
+      getParent(child.parent.fields, parent);
   }
   return parent;
 }
 
 export default {
   urlBuilder(page) {
-    let ancestors = getParent(page);
+    let ancestors = getParent(page, []);
     return `/${ancestors.join('/')}`;
   },  
 };

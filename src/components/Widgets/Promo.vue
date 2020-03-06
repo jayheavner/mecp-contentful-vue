@@ -38,7 +38,8 @@
 
 <script>
 import { documentToHtmlString } from '@contentful/rich-text-html-renderer';
-import { BLOCKS, MARKS } from '@contentful/rich-text-types';
+import { BLOCKS, MARKS, INLINES } from '@contentful/rich-text-types';
+import helpers from '@/helpers';
 
 const options = {
   renderMark: {
@@ -52,8 +53,16 @@ const options = {
         return `<p>${next(node.content)}</p>`;
         }
     },
+    [INLINES.ENTRY_HYPERLINK]: (node, next) => {
+      return helpers.resolvers.inlines_entry_hyperlink(node, next(node.content));
+    },
   }
 };
+
+
+
+
+
 
 export default {
   name: 'PromoWidget',

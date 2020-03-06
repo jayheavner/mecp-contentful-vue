@@ -26,9 +26,7 @@ const options = {
       }
     },
     [INLINES.ENTRY_HYPERLINK]: (node, next) => {
-      debugger;
-      // todo - this is only the slug, not the full path
-      return `<a href="${helpers.url.urlBuilder(node.data.target.fields.slug)}">${next(node.content)}</a>`;
+      return helpers.resolvers.inlines_entry_hyperlink(node, next(node.content));
     },
     [INLINES.ASSET_HYPERLINK]: (node, next) => {
       debugger;
