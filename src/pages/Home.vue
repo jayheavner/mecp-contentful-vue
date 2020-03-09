@@ -4,30 +4,21 @@
   </section>
   <section v-else>
     <Hero v-bind:hero="hero" />
-    <section id="aboutMECP" class="padding-top-lg">
-      <div class="container">
-        <div class="row">
-          <div class="col-xs-12 col-lg-offset-3 col-lg-9">
-            <h2>
-              <p>{{ page.pageTitle }}</p>
-            </h2>
-          </div>
-        </div>
-        <div class="row padding-vertical-lg">
-          <div class="col-xs-12 col-sm-6 col-md-3">
-            <div class="logo-wrapper padding-bottom-sm">
-              <img :src="logo" />
-            </div>
-          </div>
-          <div class="col-xs-12 col-sm-6 col-md-9" v-html="formattedText"></div>
-        </div>
-      </div>
+    <About v-bind:about="about" />
+      <section v-for="promo in promos"
+      :key="promo.sys.id"
+    >
+      <Promo v-bind:widget="promo" />
     </section>
+
   </section>
 </template>
 
 <script>
 import Hero from '@/components/PageSections/Hero';
+import About from '@/components/PageSections/About';
+import Promo from '@/components/Widgets/Promo';
+
 // import TwoColumnLayout from '@/components/PageSections/TwoColumnLayout';
 // import PromoListLayout from '@/components/PageSections/PromoListLayout';
 
@@ -38,9 +29,9 @@ import { documentToHtmlString } from '@contentful/rich-text-html-renderer';
 export default {
   name: 'Test',
   components: {
-    Hero
-    // TwoColumnLayout,
-    // PromoListLayout
+    Hero,
+    About,
+    Promo
   },
   props: {
     url: String,
@@ -48,7 +39,6 @@ export default {
   },
   data: () => ({
     page: Object,
-    promos: Object
   }),
   computed: {
     loaded() {
@@ -57,11 +47,15 @@ export default {
     hero() {
       return this.page.heroZone.fields;
     },
-    logo() {
-      return this.page.mecpLogo.fields.file.url;
+    about() {
+      return {
+        title: this.page.pageTitle,
+        logo: this.page.mecpLogo.fields.file.url,
+        text: documentToHtmlString(this.page.text)
+      }
     },
-    formattedText() {
-      return documentToHtmlString(this.page.text);
+    promos() {
+      return this.page.promoZone;
     }
   },
   mounted: function() {
