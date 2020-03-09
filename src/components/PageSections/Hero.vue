@@ -10,7 +10,7 @@
         <div class="buttons container" v-if="nav.length > 0">
           <div
             class="col-md-6 col-lg-4"
-            v-for="(item) in nav"
+            v-for="item in nav"
             :key="item.slug"
           >
             <router-link
@@ -20,7 +20,7 @@
                 params: { slug: item.slug, id: item.id }
               }"
             >
-              {{ item.pageName }}
+              {{ item.name }}
             </router-link>
           </div>
         </div>
@@ -52,11 +52,10 @@ const textOptions = {
 export default {
   name: 'Hero',
   props: {
-    section: Object
+    hero: Object
   },
   data: () => ({
     nav: Array,
-    hero: Object,
   }),
   computed: {
     ...mapState('nav', ['navItems']),
@@ -68,31 +67,28 @@ export default {
     }
   },
   created() {
-    this.hero = this.section.fields.widgets[0].fields;
+    // this.hero = this.section.fields;
     this.buildNav();
   },
   methods: {
     ...mapActions({
       fetchNav: 'nav/fetch'
     }),
-    buildLink(item) {
-      debugger;
-      let slug = this.$route.params.slug;
-      let subNav = this.$route.params.subNav;
-      if (subNav === undefined || item.slug !== subNav)
-        return `${this.$route.path}/${item.slug}`;
+    // buildLink(item) {
+    //   debugger;
+    //   let slug = this.$route.params.slug;
+    //   let subNav = this.$route.params.subNav;
+    //   if (subNav === undefined || item.slug !== subNav)
+    //     return `${this.$route.path}/${item.slug}`;
 
-      return `/${slug}/${subNav}`;
-    },
+    //   return `/${slug}/${subNav}`;
+    // },
     async buildNav() {
       let nav = Array;
       let n = this.navItems;
       if (Array.isArray(n) && n.length) nav = n;
       else nav = await this.fetchNav();
-      // let nav =
-      //   n === undefined || n.length === 0 || n[0] === undefined
-      //     ? await this.fetchNav()
-      //     : n;
+      // only want the top 3
       this.nav = nav.slice(0, 3);
     }
   }

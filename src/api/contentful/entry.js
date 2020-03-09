@@ -21,7 +21,7 @@ export default {
       //   return getLocalStorage('nav');
 console.log(process.env.VUE_APP_HOME_PAGE_ENTRY_ID);
       const response = await client.getEntries({
-        content_type: 'page',
+        content_type: 'homepage',
         'sys.id': process.env.VUE_APP_HOME_PAGE_ENTRY_ID,
         select: 'fields.children',
         include: 5
@@ -35,6 +35,10 @@ console.log(process.env.VUE_APP_HOME_PAGE_ENTRY_ID);
     }
   },
 
+  async getHomePageContent() {
+    const id =  process.env.VUE_APP_HOME_PAGE_ENTRY_ID;
+    return this.byId(id);
+  },
   async getAsset(id) {
     if (getLocalStorage(id))
     return getLocalStorage(id);
@@ -44,11 +48,11 @@ console.log(process.env.VUE_APP_HOME_PAGE_ENTRY_ID);
     return response;
   },
   async byId(id) {
-    if (getLocalStorage(id))
-      return getLocalStorage(id);
+    // if (getLocalStorage(id))
+    //   return getLocalStorage(id);
 
       // const response = await client.getEntry(id);
-      const response = await client.getEntries({'sys.id': id});
+      const response = await client.getEntries({'sys.id': id, limit: 1, include: 10});
       setLocalStorage(id, response);
     return response;
   },

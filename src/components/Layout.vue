@@ -9,10 +9,10 @@
 
 <script>
 import Hero from '@/components/PageSections/Hero';
-import OneColumn from '@/components/PageSections/OneColumn';
-import TwoColumns from '@/components/PageSections/TwoColumns';
+// import OneColumn from '@/components/PageSections/OneColumn';
+// import TwoColumnLayout from '@/components/PageSections/TwoColumnLayout';
 import AboutMECP from '@/components/PageSections/About';
-import PromoList from '@/components/PageSections/PromoList';
+// import PromoListLayout from '@/components/PageSections/PromoListLayout';
 import StudyGuides from '@/components/PageSections/StudyGuides';
 
 import api from '@/api';
@@ -24,9 +24,9 @@ export default {
   components: {
     Hero,
     AboutMECP,
-    PromoList,
-    OneColumn,
-    TwoColumns,
+    // PromoListLayout,
+    // OneColumn,
+    // TwoColumnLayout,
     StudyGuides,
   },
   props: {

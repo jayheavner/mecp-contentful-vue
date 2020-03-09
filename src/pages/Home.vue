@@ -3,84 +3,77 @@
     <span>loading...</span>
   </section>
   <section v-else>
-    <div
-      v-for="(section, index) in sections"
-      :key="index"
-    >
-      <component v-bind:is="getComponent(section)" v-bind:section="section" />
-    </div>
+    <Hero v-bind:hero="hero" />
+    <section id="aboutMECP" class="padding-top-lg">
+      <div class="container">
+        <div class="row">
+          <div class="col-xs-12 col-lg-offset-3 col-lg-9">
+            <h2>
+              <p>{{ page.pageTitle }}</p>
+            </h2>
+          </div>
+        </div>
+        <div class="row padding-vertical-lg">
+          <div class="col-xs-12 col-sm-6 col-md-3">
+            <div class="logo-wrapper padding-bottom-sm">
+              <img :src="logo" />
+            </div>
+          </div>
+          <div class="col-xs-12 col-sm-6 col-md-9" v-html="formattedText"></div>
+        </div>
+      </div>
+    </section>
   </section>
 </template>
 
 <script>
 import Hero from '@/components/PageSections/Hero';
-import TwoColumns from '@/components/PageSections/TwoColumns';
-import AboutMECP from '@/components/PageSections/About';
-import PromoList from '@/components/PageSections/PromoList';
+// import TwoColumnLayout from '@/components/PageSections/TwoColumnLayout';
+// import PromoListLayout from '@/components/PageSections/PromoListLayout';
 
 import api from '@/api';
+import helpers from '@/helpers';
 import { documentToHtmlString } from '@contentful/rich-text-html-renderer';
 
 export default {
   name: 'Test',
   components: {
-    Hero,
-    AboutMECP,
-    PromoList,
-    TwoColumns
+    Hero
+    // TwoColumnLayout,
+    // PromoListLayout
   },
   props: {
     url: String,
     pageType: String
   },
   data: () => ({
-    sections: Array,
-    about: Object,
-    hero: Object,
-    pageTitle: String,
+    page: Object,
     promos: Object
   }),
   computed: {
     loaded() {
-      return Object.keys(this.sections).length > 0;
+      return Object.keys(this.page).length > 0;
     },
+    hero() {
+      return this.page.heroZone.fields;
+    },
+    logo() {
+      return this.page.mecpLogo.fields.file.url;
+    },
+    formattedText() {
+      return documentToHtmlString(this.page.text);
+    }
   },
   mounted: function() {
-    // let d = api.contentful.one('5lZI4V0fbbQ2JkS5zViFLD');
-    // api.contentful.byType('homePage');
     this.getContent();
   },
   methods: {
     getComponent(section) {
-      // debugger;
-      return section.fields.layout.replace(' ', '');
+      return helpers.components.getComponent(section.sys.contentType.sys.id);
     },
     async getContent() {
-      // The base type is page
-      // Pages have Page Sections
-      // Page Sections have Widgets
-      let content = await api.contentful.bySlug('home');
-      this.sections = content.fields.sections;
-      // for (let section of content.fields.sections) {
-      //   debugger;
-      //   switch (section.fields.type) {
-      //     case 'Page Title':
-      //       this.pageTitle = section.fields.title;
-      //       break;
-      //     case 'Generic Page Section':
-      //       this.about = section.fields.widgets;
-      //       break;
-      //     case 'Promo':
-      //       this.promos = section.fields.widgets;
-      //       break;
-      //     case 'Home Page Hero':
-      //       this.hero = section.fields.widgets[0].fields;
-      //       break;
-      //     default:
-      //       debugger;
-      //       break;
-      //   }
-      // }
+      let content = await api.contentful.getHomePageContent();
+      this.page = content.items[0].fields;
     }
   }
 };

@@ -1,0 +1,80 @@
+<template>
+  <div class="row padding-vertical-lg">
+    <div
+      class="col-xs-12 col-sm-6 col-md-3"
+      v-for="(widget, index) in leftColumn"
+      :key="`${getComponent(widget)}.${index}`"
+    >
+      <component v-bind:is="getComponent(widget)" v-bind:widget="widget" />
+
+      <!-- <div class="logo-wrapper padding-bottom-sm">
+        <img :src="imageUrl" alt />
+      </div> -->
+    </div>
+    <div
+      class="col-xs-12 col-sm-6 col-md-9"
+      v-for="(widget) in rightColumn"
+      :key="getComponent(widget)"
+    >
+      <component v-bind:is="getComponent(widget)" v-bind:widget="widget" />
+      <!-- <div class="col-xs-12 col-sm-6 col-md-9" v-html="formattedText"></div> -->
+    </div>
+  </div>
+</template>
+
+<script>
+import Copy from '@/components/Widgets/Copy';
+import FloatedImage from '@/components/Widgets/FloatedImage';
+
+import helpers from '@/helpers';
+import { documentToHtmlString } from '@contentful/rich-text-html-renderer';
+
+export default {
+  name: 'TwoColumnLayout',
+  components: {
+    Copy,
+    FloatedImage,
+  },
+  props: {
+    section: Object,
+    about: Array,
+    image: Object,
+    text: Object
+  },
+  data: () => ({}),
+  computed: {
+    leftColumn() {
+      return this.section.fields.leftColumn;
+    },
+    rightColumn() {
+      return this.section.fields.rightColumn;
+    },
+    imageUrl() {
+      debugger;
+      return this.about.image.fields.file.url;
+    },
+    formattedText() {
+      debugger;
+      return documentToHtmlString(this.about.text);
+    }
+  },
+  watch: {
+    $route() {
+      this.init();
+    }
+  },
+  // created: function() {
+  //   this.init();
+  // },
+  methods: {
+    // init() {
+    //   debugger;
+    //   this.leftColumn = this.section.fields.leftColumn;
+    //   this.rightColumn = this.section.fields.rightColumn;
+    // },
+    getComponent(section) {
+      return helpers.components.getComponent(section.sys.contentType.sys.id);
+    }
+  }
+};
+</script>

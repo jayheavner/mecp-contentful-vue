@@ -16,7 +16,7 @@ import { documentToHtmlString } from '@contentful/rich-text-html-renderer';
 import helpers from '@/helpers';
 
 export default {
-  name: 'PromoList',
+  name: 'PromoListLayout',
   components: {
     GenericWidget,
     Promo

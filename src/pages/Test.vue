@@ -15,7 +15,7 @@
 
 <script>
 import Hero from '@/components/PageSections/Hero';
-import TwoColumns from '@/components/PageSections/TwoColumns';
+// import TwoColumns from '@/components/PageSections/TwoColumns';
 import AboutMECP from '@/components/PageSections/About';
 import PromoList from '@/components/PageSections/PromoList';
 
@@ -28,7 +28,7 @@ export default {
     Hero,
     AboutMECP,
     PromoList,
-    TwoColumns
+    // TwoColumns
   },
   props: {
     url: String,
