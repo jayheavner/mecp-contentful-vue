@@ -27,8 +27,8 @@
 </template>
 
 <script>
+import LayoutStudyGuideList from '@/components/Layouts/LayoutStudyGuideList';
 import Header from '@/components/Header';
-import Layout from '@/components/Layout';
 import CallToAction from '@/components/Widgets/CallToAction';
 import Copy from '@/components/Widgets/Copy';
 import EmbeddedVideo from '@/components/Widgets/EmbeddedVideo';
@@ -42,8 +42,8 @@ import helpers from '@/helpers';
 export default {
   name: 'Page',
   components: {
+    LayoutStudyGuideList,
     Header,
-    Layout,
     CallToAction,
     Copy,
     EmbeddedVideo,
