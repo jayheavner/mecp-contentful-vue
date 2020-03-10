@@ -15,11 +15,5 @@ export default {
       Utility,
       Main
   },
-  props: {},
-  computed: {},
-
-  mounted: function() {
-    debugger;
-  }
 };
 </script>

@@ -85,7 +85,6 @@ export default {
       return widget;
     },
     async byId(id) {
-      debugger;
       this.page = (await api.contentful.byId(id)).fields;
     },
     async bySlug(slug) {

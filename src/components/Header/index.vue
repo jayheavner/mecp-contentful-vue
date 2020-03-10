@@ -20,13 +20,5 @@ export default {
     Nav,
     SubNav
   },
-  props: {},
-  data: () => ({ }),
-
-  computed: {},
-
-  mounted: function() {
-    debugger;
-  }
 };
 </script>

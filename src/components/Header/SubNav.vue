@@ -1,12 +1,10 @@
 <template>
-<div>{{subNav.length}}
+<div>
   <div class="row subnav" v-if="display">
     <div class="scrollable">
       <ul>
         <li v-if="hideOverview" :class="isCurrent($route.params.slug)">
-          <router-link
-            :to="{ name: 'page', params: { slug: $route.params.slug } }"
-          >
+          <router-link :to="{ name: 'page', params: { slug: $route.params.slug } }">
             Overview
           </router-link>
         </li>
@@ -62,13 +60,11 @@ export default {
       fetchNav: 'nav/fetch'
     }),
     buildLink(item) {
-      let page = item.parent.fields;
       let parents = getParent(item.parent.fields);
       return `/${parents.join('/')}/${item.slug}`;
     },
     async buildSubNav() {
       this.hideOverview = true;
-      debugger;
       let route = this.$route;
       let n = this.navItems;
       let nav =
@@ -81,7 +77,7 @@ export default {
         let response = await api.contentful.bySlug(slug);
         let a = [];
         this.hideOverview = false;
-        for (let child of response.fields.children) a.push(child.fields);
+        for (let child of response.fields.parent.fields.children) a.push(child.fields);
         this.subNav = a;
       } else this.subNav = subNav.children;
     },

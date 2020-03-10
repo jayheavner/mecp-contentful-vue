@@ -1,7 +1,7 @@
 <template>
   <ul class="main-nav hidden-sm-down">
     <li
-      v-for="(item) in navItems"
+      v-for="item in navItems"
       :key="item.slug"
       :class="isCurrent(item.slug)"
     >
@@ -41,7 +41,6 @@ export default {
       fetchNav: 'nav/fetch'
     }),
     buildLink(item) {
-      debugger;
       let slug = this.$route.params.slug;
       let subNav = this.$route.params.subNav;
       if (subNav === undefined || item.slug !== subNav)

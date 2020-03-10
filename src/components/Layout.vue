@@ -9,14 +9,10 @@
 
 <script>
 import Hero from '@/components/PageSections/Hero';
-// import OneColumn from '@/components/PageSections/OneColumn';
-// import TwoColumnLayout from '@/components/PageSections/TwoColumnLayout';
 import AboutMECP from '@/components/PageSections/About';
-// import PromoListLayout from '@/components/PageSections/PromoListLayout';
 import StudyGuides from '@/components/PageSections/StudyGuides';
 
 import api from '@/api';
-import { documentToHtmlString } from '@contentful/rich-text-html-renderer';
 import helpers from '@/helpers';
 
 export default {
@@ -24,9 +20,6 @@ export default {
   components: {
     Hero,
     AboutMECP,
-    // PromoListLayout,
-    // OneColumn,
-    // TwoColumnLayout,
     StudyGuides,
   },
   props: {

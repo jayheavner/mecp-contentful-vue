@@ -28,8 +28,6 @@ const options = {
       switch (node.data.target.sys.contentType.sys.id) {
         case 'floatedImage':
           return `<img alt="" max-width="100%" src="${obj.image.fields.file.url}" style="float: ${obj.floatDirection}; margin: 10px 15px;">`;
-        default:
-          debugger;
       }
     },
     [INLINES.ENTRY_HYPERLINK]: (node, next) => {

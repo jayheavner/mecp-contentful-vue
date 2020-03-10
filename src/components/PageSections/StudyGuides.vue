@@ -25,13 +25,9 @@ export default {
     guides: Array
   }),
   mounted: function() {
-    debugger;
     this.guides = this.section;
   },
   methods: {
-    navigate() {
-      debugger;
-    },
     getComponent(section) {
       let type = section.sys.contentType.sys.id;
       return helpers.components.getWidgetComponent(type);
