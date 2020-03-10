@@ -1,39 +1,42 @@
 <template>
-  <footer class="page-section-footer">
+  <footer v-if="loaded" class="page-section-footer">
     <div class="container">
       <div class="row">
         <div class="col-md-9">
           <p>
-            <strong
-              ><span class="glyphicon glyphicon-copyright-mark"></span>© 2020
-              MECP All rights reserved.</strong
-            ><br />
-            <strong><a href="/Privacy-Policy.aspx">Privacy Policy</a></strong> |
-            <strong><a href="/Terms-of-Use">Terms of Use</a></strong> |
-            <strong><a href="/FAQ.aspx">MECP FAQ</a></strong
-            ><br />
-            <strong
-              ><a href="//www.cta.tech/about.aspx" target="_blank"
-                >About CTA</a
-              ></strong
-            >
-            |
-            <strong
-              ><a
-                href="//www.cta.tech/Membership/Divisions-Councils/Vehicle-Technology-Division.aspx"
-                target="_blank"
-                >About Vehicle Technology Division</a
-              ></strong
-            >
+            <strong>
+              <span class="glyphicon glyphicon-copyright-mark"></span>
+              © {{year}}
+              MECP All rights reserved.
+            </strong>
+            <br />
+            <FooterLink
+              v-for="(link, index) in content.links"
+              :key="link.slug"
+              v-bind:link="link"
+              v-bind:isLast="index === Object.keys(content.links).length - 1"
+            />
+
+            <br />
+            <ExternalLink
+              v-for="(link, index) in content.externalLinks"
+              :key="index"
+              v-bind:link="link"
+              v-bind:isLast="index === Object.keys(content.externalLinks).length - 1"
+            />
           </p>
         </div>
         <div class="col-xs-12 col-sm-12 col-md-3">
           <p>
-            <strong>CONTACT US</strong><br />
-            <strong>T</strong>&nbsp;866-858-1555<br />
-            <strong
-              >E&nbsp;<a href="mailto:mecp@mecp.com">mecp@mecp.com</a></strong
-            >
+            <strong>CONTACT US</strong>
+            <br />
+            <strong>T</strong>
+            &nbsp;{{content.phone}}
+            <br />
+            <strong>
+              E&nbsp;
+              <a :href="mailto">{{content.email}}</a>
+            </strong>
           </p>
         </div>
       </div>
@@ -42,7 +45,38 @@
 </template>
 
 <script>
+import FooterLink from './Widgets/FooterLink';
+import ExternalLink from './Widgets/ExternalLink';
+import api from '@/api';
+
 export default {
-  
-}
+  name: 'siteFooter',
+  components: {
+    FooterLink,
+    ExternalLink
+  },
+  data: () => ({
+    content: Object
+  }),
+  computed: {
+    loaded() {
+      return Object.keys(this.content).length > 0;
+    },
+    year() {
+      return new Date().getFullYear();
+    },
+    mailto() {
+      return `mailto:${this.content.email}`;
+    }
+  },
+  created: function() {
+    this.init();
+  },
+  methods: {
+    async init() {
+      let response = await api.contentful.getFooterContent();
+      this.content = response.items[0].fields;
+    }
+  }
+};
 </script>
