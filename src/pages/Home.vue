@@ -15,9 +15,9 @@
 </template>
 
 <script>
-import Hero from '@/components/PageSections/Hero';
-import About from '@/components/PageSections/About';
-import Promo from '@/components/Widgets/Promo';
+import Hero from '@/components/Homepage/Hero';
+import About from '@/components/Homepage/About';
+import Promo from '@/components/Homepage/Promo';
 
 import api from '@/api';
 import { documentToHtmlString } from '@contentful/rich-text-html-renderer';
