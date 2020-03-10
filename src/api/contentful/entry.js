@@ -1,25 +1,12 @@
+/* eslint no-console: ["error", { allow: ["warn", "error"] }] */
 import { client } from './client';
-import { documentToHtmlString } from '@contentful/rich-text-html-renderer';
 import {parse, stringify} from 'flatted/esm';
 
 export default {
-  all() {
-    debugger;
-    console.log(client);
-    client
-      .getEntries()
-      .then(response => {
-        debugger;
-        console.log(response.items);
-      })
-      .catch(console.error);
-  },
-
   async getMainNav() {
     try {
       // if (getLocalStorage('nav'))
       //   return getLocalStorage('nav');
-console.log(process.env.VUE_APP_HOME_PAGE_ENTRY_ID);
       const response = await client.getEntries({
         content_type: 'homepage',
         'sys.id': process.env.VUE_APP_HOME_PAGE_ENTRY_ID,
@@ -30,13 +17,17 @@ console.log(process.env.VUE_APP_HOME_PAGE_ENTRY_ID);
       setLocalStorage('nav', children);
       return children;
     } catch (err) {
-      debugger;
+      // eslint-disable-next-line no-console
       console.err;
     }
   },
 
   async getHomePageContent() {
-    const id =  process.env.VUE_APP_HOME_PAGE_ENTRY_ID;
+    const id =  process.env.VUE_APP_HOMEPAGE_ID;
+    return this.byId(id);
+  },
+  async getFooterContent() {
+    const id =  process.env.VUE_APP_FOOTER_ID;
     return this.byId(id);
   },
   async getAsset(id) {
@@ -77,25 +68,25 @@ console.log(process.env.VUE_APP_HOME_PAGE_ENTRY_ID);
         // setLocalStorage(slug, response.items[0]);
       return response.items[0];
     } catch (err) {
+      // eslint-disable-next-line no-console
       console.err;
     }
   },
 
   async byType(type) {
-    debugger;
     await client
       .getEntries({
         content_type: type,
         order: '-sys.createdAt'
       })
       .then(pages => {
-        debugger;
         // return data that should be available
         // in the template
         return {
           navItems: pages.items
         };
       })
+      // eslint-disable-next-line no-console
       .catch(console.error);
   },
 
@@ -112,11 +103,11 @@ console.log(process.env.VUE_APP_HOME_PAGE_ENTRY_ID);
         limit: 1,
         include: 2
       });
-      console.log(response.items[0]);
       setLocalStorage(key, response.items[0]);
       // console.log(parseHtml(response.items[0]));
       return response.items[0];
     } catch (err) {
+      // eslint-disable-next-line no-console
       console.err;
     }
   },
@@ -130,13 +121,13 @@ console.log(process.env.VUE_APP_HOME_PAGE_ENTRY_ID);
       })
     ])
       .then(([pages]) => {
-        debugger;
         // return data that should be available
         // in the template
         return {
           navItems: pages.items
         };
       })
+      // eslint-disable-next-line no-console
       .catch(console.error);
   }
 };
@@ -151,27 +142,21 @@ const setLocalStorage = (key, val) => {
   window.localStorage.setItem(key, json);
 
 }
-const parseHtml = (entry, parent = '', level = 0, maxNesting = 3) => {
-  let content = {};
-  for (const field in entry.fields) {
-    let o = entry.fields[field];
-    let value = '';
-    debugger;
-    if (o.fields !== undefined && level <= maxNesting) {
-      let l = level + 1;
-      value = parseHtml(o, `${parent}:${field}`, l);
-    } else if (o.nodeType !== undefined && o.nodeType === 'document') {
-      value = documentToHtmlString(o);
-      let v = documentToHtmlString(o.content[0]);
-      let v1 = documentToHtmlString(o.content[1]);
-      debugger;
-    } else {
-      value = entry.fields[field];
-    }
-    if (level === 0)
-      // console.log(`   parent > ${parent}\n   level > ${level}`);
-      console.log({ [field]: value });
-    content[field] = value;
-  }
-  return content;
-};
+// const parseHtml = (entry, parent = '', level = 0, maxNesting = 3) => {
+//   let content = {};
+//   for (const field in entry.fields) {
+//     let o = entry.fields[field];
+//     let value = '';
+//     if (o.fields !== undefined && level <= maxNesting) {
+//       let l = level + 1;
+//       value = parseHtml(o, `${parent}:${field}`, l);
+//     } else if (o.nodeType !== undefined && o.nodeType === 'document') {
+//       value = documentToHtmlString(o);
+//     } else {
+//       value = entry.fields[field];
+//     }
+//     if (level === 0)
+//       content[field] = value;
+//   }
+//   return content;
+// };
