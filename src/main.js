@@ -16,13 +16,7 @@ import Page from './pages/Page.vue';
 Vue.use(Router);
 let router = new Router({
   mode: 'history',
-  routes: [
-    // {
-    //   path: '/test',
-    //   name: 'test',
-    //   component: Test
-    // },
-    {
+  routes: [{
       path: '/',
       name: 'home',
       component: Home
@@ -49,11 +43,25 @@ let router = new Router({
   ]
 });
 
-router.beforeEach(function(to, from, next) {
+router.beforeEach(function (to, from, next) {
   // super duper ghetto
   if (to.path === '/professionals')
-    router.push({ path: `${to.path}/about-certification`});
+    router.push({
+      path: `${to.path}/about-certification`
+    });
+  else if (to.path !== '/') {
+    to.params.slug = to.params.slug.toLowerCase();
+    let slug = to.params.slug;
+    let extension = (/[.]/.exec(slug)) ? /[^.]+$/.exec(slug)[0] : undefined;
+    if (extension === 'aspx') {
+      let path = slug.replace(`.${extension}`, '');
+      router.push({
+        path: path
+      });
+    }
+  }
   next();
+
 });
 
 new Vue({
