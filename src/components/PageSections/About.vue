@@ -21,38 +21,11 @@
 </template>
 
 <script>
-import { documentToHtmlString } from '@contentful/rich-text-html-renderer';
 
 export default {
   name: 'About',
   props: {
     about: Object,
   },
-  // data: () => ({
-  // }),
-  // watch: {
-  //   $route() {
-  //     this.init();
-  //   }
-  // },
-  // created: function() {
-  //   this.init();
-  // },
-  // computed: {
-  //   pageTitle() {
-  //     return this.content.title;
-  //   },
-  //   imageUrl() {
-  //     return this.content.image.fields.file.url;
-  //   },
-  //   formattedText() {
-  //     return documentToHtmlString(this.content.text);
-  //   }
-  // },
-  // methods: {
-  //   init() {
-  //     this.content = this.section.fields.widgets[0].fields;
-  //   }
-  // }
 };
 </script>

@@ -67,17 +67,15 @@ const options = {
 };
 
 export default {
-  name: 'PromoWidget',
+  name: 'Promo',
   props: {
     widget: Object
   },
   data: () => ({
     promo: Object
-    // rawHTML: Object,
-    // content: Array
   }),
   mounted: function() {
-    this.promo = this.widget.fields || this.widget;
+    this.promo = this.widget.fields;
     this.promo.showBackgroundImage = this.promo.backgroundImage !== undefined;
     this.promo.backgroundImage = this.promo.showBackgroundImage
       ? {
@@ -85,14 +83,6 @@ export default {
         }
       : undefined;
     this.promo.showLearnMoreLink = this.promo.linkedPage !== undefined;
-    let relatedContent = {
-      slug: this.promo.showLearnMoreLink
-        ? this.promo.linkedPage.fields.slug
-        : undefined,
-      entryId: this.promo.showLearnMoreLink
-        ? this.promo.linkedPage.sys.id
-        : undefined
-    };
     this.promo.relatedContent = {
       slug: this.promo.showLearnMoreLink
         ? this.promo.linkedPage.fields.slug
@@ -106,51 +96,7 @@ export default {
       options
     );
 
-    // // flatten
-    // let array = [];
-    // for (let i = 0; i < this.promos; i++) {
-    // debugger;
-    //   let o = {};
-    //   let item = this.promos.content[i];
-    //   if (item === undefined || item.data.target === undefined) continue;
-    //   let fields = item.data.target.fields;
-    //   for (const field in fields) {
-    //     o[field] = fields[field];
-    //   }
-    //   array[i] = o;
-    // }
-
-    // // constructor
-    // let transformed = [];
-    // let content = [];
-    // for (let i = 0; i < array.length; i++) {
-    //   let o = {};
-    //   o.title = array[i].title;
-    //   o.showBackgroundImage = array[i].backgroundImage !== undefined;
-    //   o.backgroundImage = o.showBackgroundImage
-    //     ? {
-    //         'background-image': `url(${array[i].backgroundImage.fields.file.url})`
-    //       }
-    //     : undefined;
-    //   o.showLearnMoreLink = array[i].linkedPage !== undefined;
-    //   let relatedContent = {
-    //     slug: o.showLearnMoreLink ? array[i].linkedPage.fields.slug : undefined,
-    //     entryId: o.showLearnMoreLink ? array[i].linkedPage.sys.id : undefined
-    //   };
-    //   o.relatedContent = {
-    //     slug: o.showLearnMoreLink ? array[i].linkedPage.fields.slug : undefined,
-    //     entryId: o.showLearnMoreLink ? array[i].linkedPage.sys.id : undefined
-    //   };
-    //   o.description = documentToHtmlString(array[i].description);
-    //   content.push(o);
-    // }
-    // this.content = content;
   }
-  // methods: {
-  //   navigate() {
-  //     debugger;
-  //   },
-  // }
 };
 </script>
 <style lang="scss">

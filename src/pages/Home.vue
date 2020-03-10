@@ -3,13 +3,13 @@
     <span>loading...</span>
   </section>
   <section v-else>
-    <Hero v-bind:hero="hero" />
+    <hero v-bind:hero="hero" />
     <About v-bind:about="about" />
-      <section v-for="promo in promos"
-      :key="promo.sys.id"
-    >
-      <Promo v-bind:widget="promo" />
-    </section>
+    <Promo
+      v-for="(promo, index) in content.promoZone"
+      :key="index"
+      v-bind:widget="promo"
+    />
 
   </section>
 </template>
@@ -19,15 +19,23 @@ import Hero from '@/components/PageSections/Hero';
 import About from '@/components/PageSections/About';
 import Promo from '@/components/Widgets/Promo';
 
-// import TwoColumnLayout from '@/components/PageSections/TwoColumnLayout';
-// import PromoListLayout from '@/components/PageSections/PromoListLayout';
-
 import api from '@/api';
-import helpers from '@/helpers';
 import { documentToHtmlString } from '@contentful/rich-text-html-renderer';
+import { BLOCKS, MARKS } from '@contentful/rich-text-types';
+
+const textOptions = {
+  renderMark: {
+    [MARKS.BOLD]: text => `<strong>${text}</strong>`
+  },
+  // renderNode: {
+  //   [BLOCKS.PARAGRAPH]: (node, next) => {
+  //     return next(node.content);
+  //   }
+  // }
+};
 
 export default {
-  name: 'Test',
+  name: 'Home',
   components: {
     Hero,
     About,
@@ -38,36 +46,36 @@ export default {
     pageType: String
   },
   data: () => ({
-    page: Object,
+    content: Array,
+    pageTitle: String,
+    promos: Object
   }),
   computed: {
     loaded() {
-      return Object.keys(this.page).length > 0;
+      return Object.keys(this.content).length > 0;
     },
     hero() {
-      return this.page.heroZone.fields;
+      return {
+        text: documentToHtmlString(this.content.heroText, textOptions),
+        image: this.content.heroImage.fields.file.url,
+        links: this.content.heroLinks
+      }
     },
     about() {
       return {
-        title: this.page.pageTitle,
-        logo: this.page.mecpLogo.fields.file.url,
-        text: documentToHtmlString(this.page.text)
+        title: this.content.pageTitle,
+        logo: this.content.mecpLogo.fields.file.url,
+        text: documentToHtmlString(this.content.text, textOptions),
       }
-    },
-    promos() {
-      return this.page.promoZone;
     }
   },
   mounted: function() {
     this.getContent();
   },
   methods: {
-    getComponent(section) {
-      return helpers.components.getComponent(section.sys.contentType.sys.id);
-    },
     async getContent() {
-      let content = await api.contentful.getHomePageContent();
-      this.page = content.items[0].fields;
+      let response = await api.contentful.getHomePageContent();
+      this.content = response.items[0].fields;
     }
   }
 };

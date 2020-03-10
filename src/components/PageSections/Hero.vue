@@ -1,9 +1,9 @@
 <template>
   <section class="bg-hero full-height home container-fluid">
-    <img title="MECP" :src="imageUrl" alt="MECP" />
+    <img title="MECP" :src="hero.image" alt="MECP" />
     <div id="mission-statement" class="content sticky-item">
       <h1 class="title">
-        <p v-html="formattedText"></p>
+        <p v-html="hero.text"></p>
       </h1>
       <br /><br />
       <section v-if="nav.length > 0">
@@ -59,30 +59,14 @@ export default {
   }),
   computed: {
     ...mapState('nav', ['navItems']),
-    imageUrl() {
-      return this.hero.image.fields.file.url;
-    },
-    formattedText() {
-      return documentToHtmlString(this.hero.text, textOptions);
-    }
   },
   created() {
-    // this.hero = this.section.fields;
     this.buildNav();
   },
   methods: {
     ...mapActions({
       fetchNav: 'nav/fetch'
     }),
-    // buildLink(item) {
-    //   debugger;
-    //   let slug = this.$route.params.slug;
-    //   let subNav = this.$route.params.subNav;
-    //   if (subNav === undefined || item.slug !== subNav)
-    //     return `${this.$route.path}/${item.slug}`;
-
-    //   return `/${slug}/${subNav}`;
-    // },
     async buildNav() {
       let nav = Array;
       let n = this.navItems;
